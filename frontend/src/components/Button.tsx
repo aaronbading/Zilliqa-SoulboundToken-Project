@@ -6,13 +6,15 @@ const Button = ({children, ...props}: ButtonProps) => {
   return (
     <button
         className={cn(
-          "inline-block",
+          "flex",
+          "items-center",
+          "gap-3",
           "px-6",
           "py-2.5",
           "bg-blue-600",
           "text-white",
           "font-medium",
-          "text-xs",
+          "text-md",
           "leading-tight",
           "uppercase",
           "rounded",

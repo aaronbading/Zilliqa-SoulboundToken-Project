@@ -1,39 +1,32 @@
 import classNames from 'classnames'
-import React from 'react'
+import React, {useContext, useEffect} from 'react'
 import { BsWallet } from "react-icons/bs"
-import cn from 'classnames'
+import { AiOutlineLogout} from "react-icons/ai"
+import { useWalletProvider } from '../providers/walletProvider'
+import Button from './Button'
+
 
 function Navbar() {
+    const{connectWallet, walletAddress, setWallet, disConnectWallet}= useWalletProvider()
+    useEffect(()=>{
+      if(window.zilPay?.wallet?.isConnect){
+        setWallet(window.zilPay.wallet.defaultAccount.base16)
+      }
+    })
+    const shortenAddress=(address:String)=>{
+      const shortAddress=`${address.slice(0,4)}...${address.slice(-3)}`
+      return shortAddress
+    }
+    
   return (
     <div className='px-5 py-3 bg-slate-900 items-center shadow-lg mx-auto flex justify-between'>
         <a href='/'><h1 className='text-white font-bold text-2xl'>ZILLIQA</h1></a>
-        <button className={
-            cn(
-                "flex",
-                "gap-3",
-                "items-center",
-                "px-6",
-                "py-2.5",
-                "bg-blue-600",
-                "text-white",
-                "font-medium",
-                "leading-tight",
-                "uppercase",
-                "rounded",
-                "shadow-md",
-                "hover:bg-blue-700",
-                "hover:shadow-lg",
-                "focus:bg-blue-700",
-                "focus:shadow-lg",
-                "focus:outline-none",
-                "focus:ring-0",
-                "active:bg-blue-800",
-                "active:shadow-lg",
-                "transition",
-                "duration-150",
-                "ease-in-out"
-              )
-        }><BsWallet/> Connect</button>
+        {!walletAddress && <Button onClick={connectWallet}><BsWallet/> Connect</Button>}
+        {walletAddress && <div className='flex gap-1'>
+          <Button onClick={connectWallet}>
+          <h1 className='lowercase'>{shortenAddress(walletAddress)}</h1> 
+          </Button> <Button onClick={disConnectWallet}><AiOutlineLogout/></Button>
+          </div>}
     </div>
   )
 }
