@@ -17,7 +17,7 @@ function WalletProvider({children}:Props) {
 
   const connectWallet=async()=>{
     if(window.zilPay){
-       const wallet=await zilPay.wallet.connect()
+       await zilPay.wallet.connect()
        setWallet(zilPay.wallet.defaultAccount.base16)
     }else{
       alert('Install ZillPay Wallet')
@@ -25,7 +25,7 @@ function WalletProvider({children}:Props) {
   }
   const disConnectWallet=async()=>{
     if(window.zilPay){
-       const wallet=await zilPay.wallet.disconnect()
+       await zilPay.wallet.disconnect()
        setWallet('')
     }
   }
