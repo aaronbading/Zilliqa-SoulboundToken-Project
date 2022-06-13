@@ -5,7 +5,7 @@ import cn from 'classnames'
 
 function Navbar() {
   return (
-    <div className='px-5 py-5 bg-slate-900 items-center shadow-lg mx-auto flex justify-between'>
+    <div className='px-5 py-3 bg-slate-900 items-center shadow-lg mx-auto flex justify-between'>
         <a href='/'><h1 className='text-white font-bold text-2xl'>ZILLIQA</h1></a>
         <button className={
             cn(

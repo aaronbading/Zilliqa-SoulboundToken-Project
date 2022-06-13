@@ -1,32 +1,34 @@
-import { useState } from "react";
+import { Zilliqa } from "@zilliqa-js/zilliqa";
+import { useEffect, useState } from "react";
 import cn from "classnames";
-<<<<<<< HEAD
-import { useZilliqa } from "./providers/ZilliqaProvider";
-import Button from "./components/Button";
-import Input from "./components/Input";
-=======
 import Navbar from "./components/Navbar";
->>>>>>> 86fda5b (added navbar, walletProvider)
 
 const Dummy = () => {
-  const { zilliqa } = useZilliqa();
+  const [zilliqaClient, setZilliqaClient] = useState<Zilliqa | null>(null);
   const [address, setAddress] = useState("");
   const [balance, setBalance] = useState("-");
   const [isLoading, setIsLoading] = useState(false);
 
-  const getWalletBalance = async () => {
+  const test = async () => {
     setIsLoading(true);
+    const zilliqa = zilliqaClient;
+    if (!zilliqa) {
+      return;
+    }
+
     const res = await zilliqa.blockchain.getBalance(address);
+
     setBalance(res.result.balance);
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    const zilliqa = new Zilliqa("https://dev-api.zilliqa.com");
+    setZilliqaClient(zilliqa);
+  }, []);
+
   return (
-<<<<<<< HEAD
-    <div className={cn("mt-8", "text-center")}>
-      <Input
-=======
-    <div className={cn( "text-center")}>
+    <div className={cn("text-center")}>
       <Navbar/>
       <input
         className={cn(
@@ -47,13 +49,41 @@ const Dummy = () => {
           "focus:border-blue-600",
           "focus:outline-none"
         )}
->>>>>>> 86fda5b (added navbar, walletProvider)
         onChange={(e) => setAddress(e.target.value)}
         value={address}
       />{" "}
       (try: 0xa6BdD5f222f678808eCC4E34Bc34E5f0c7204044)
       <p>Balance: {isLoading ? "Loading..." : balance}</p>
-      <Button onClick={() => getWalletBalance()}>Get Balance</Button>
+      <button
+        className={cn(
+          "inline-block",
+          "px-6",
+          "py-2.5",
+          "bg-blue-600",
+          "text-white",
+          "font-medium",
+          "text-xs",
+          "leading-tight",
+          "uppercase",
+          "rounded",
+          "shadow-md",
+          "hover:bg-blue-700",
+          "hover:shadow-lg",
+          "focus:bg-blue-700",
+          "focus:shadow-lg",
+          "focus:outline-none",
+          "focus:ring-0",
+          "active:bg-blue-800",
+          "active:shadow-lg",
+          "transition",
+          "duration-150",
+          "ease-in-out"
+        )}
+        onClick={() => test()}
+        disabled={!zilliqaClient}
+      >
+        Get Balance
+      </button>
     </div>
   );
 };
