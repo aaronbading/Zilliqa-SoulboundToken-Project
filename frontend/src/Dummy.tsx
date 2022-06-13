@@ -52,7 +52,34 @@ const Dummy = () => {
       />{" "}
       (try: 0xa6BdD5f222f678808eCC4E34Bc34E5f0c7204044)
       <p>Balance: {isLoading ? "Loading..." : balance}</p>
-      <button onClick={() => test()} disabled={!zilliqaClient}>
+      <button
+        className={cn(
+          "inline-block",
+          "px-6",
+          "py-2.5",
+          "bg-blue-600",
+          "text-white",
+          "font-medium",
+          "text-xs",
+          "leading-tight",
+          "uppercase",
+          "rounded",
+          "shadow-md",
+          "hover:bg-blue-700",
+          "hover:shadow-lg",
+          "focus:bg-blue-700",
+          "focus:shadow-lg",
+          "focus:outline-none",
+          "focus:ring-0",
+          "active:bg-blue-800",
+          "active:shadow-lg",
+          "transition",
+          "duration-150",
+          "ease-in-out"
+        )}
+        onClick={() => test()}
+        disabled={!zilliqaClient}
+      >
         Get Balance
       </button>
     </div>
