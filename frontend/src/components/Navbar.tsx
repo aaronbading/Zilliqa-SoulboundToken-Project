@@ -1,5 +1,4 @@
-import classNames from 'classnames'
-import React, {useContext, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import { BsWallet } from "react-icons/bs"
 import { AiOutlineLogout} from "react-icons/ai"
 import { useWalletProvider } from '../providers/walletProvider'
