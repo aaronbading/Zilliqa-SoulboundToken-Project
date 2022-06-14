@@ -1,0 +1,45 @@
+{
+  "name": "zilliqa-soulbound-project",
+  "version": "1.0.0",
+  "description": "The Zil Soul-bound token project is one that realizes a non-transferable token that represents ones credentials and identity on chain. The project aims to provide features such as minting SBT for yourself or others , Viewing your own and other peoples SBTs.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "run:isolated-server": "docker run --name zrc_local -d -p 5555:5555 --entrypoint isolatedServer zilliqa/zilliqa-isolated-server:a01fe00 -t 5000 -f boot.json -u 0",
+    "rm:isolated-server": "docker stop zrc_local | xargs docker rm",
+    "test": "cross-env PORT=5555 jest --verbose --runInBand",
+    "test:ci": "npm run run:isolated-server; npm run test && npm run rm:isolated-server",
+    "format": "npx prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZilSBT/Zilliqa-Soulbound-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZilSBT/Zilliqa-Soulbound-Project/issues"
+  },
+  "homepage": "https://github.com/ZilSBT/Zilliqa-Soulbound-Project#readme",
+  "dependencies": {
+    "@types/jest": "^28.1.1",
+    "@zilliqa-js/scilla-json-utils": "^0.2.0",
+    "@zilliqa-js/zilliqa": "^3.3.4",
+    "cross-env": "^7.0.3",
+    "jest": "^28.1.1",
+    "prettier": "^2.7.0",
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.7.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testTimeout": 600000,
+    "globals": {
+      "GENESIS_PRIVATE_KEYS": [
+        "e53d1c3edaffc7a7bab5418eb836cf75819a82872b4a1a0f1c7fcf5c3e020b89"
+      ]
+    }
+  }
+}
