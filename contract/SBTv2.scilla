@@ -63,6 +63,7 @@ type Error =
   | InvalidFeeBPSError
   | ZeroAddressDestinationError
   | ThisAddressDestinationError
+  | MoreThanOneTokenError
 
 let make_error =
   fun (result: Error) =>
@@ -86,6 +87,7 @@ let make_error =
       | ZeroAddressDestinationError        => Int32 -16
       | ThisAddressDestinationError        => Int32 -17
       | NotContractOwnershipRecipientError => Int32 -18
+      | MoreThanOneTokenError              => Int32 -19
       end
     in
     { _exception: "Error"; code: result_code }
@@ -292,17 +294,29 @@ procedure UpdateBalance(operation: Operation, address: ByStr20)
   end
 end
 
+procedure HasToken(to: ByStr20)
+  tokenbalance <- balances[to];
+  match tokenbalance with
+  | 0 => False
+  | 1 => True
+    error = MoreThanOneTokenError
+    Throw error
+  end
+end
+
 (* @Requirements: *)
 (* - `to` must not be the zero address. Otherwise, it must throw `ZeroAddressDestinationError` *)
 (* - `_sender` must be a minter. Otherwise, it must throw `NotMinterError` *)
 procedure MintToken(to: ByStr20)
   RequireValidDestination to;
 
+  HasToken to;
+
   IsMinter _sender;
 
   (* generate ID *)
   current_token_id_count <- token_id_count;
-  new_token_id_count = builtin add current_token_id_count one;
+  new_token_id_count = builtin add current_token_id_count one; 
   token_id_count := new_token_id_count;
   token_id = new_token_id_count;
 
@@ -385,7 +399,7 @@ transition Pause()
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_PauseCallback";
+    _tag: "ZSBT_PauseCallback";
     _recipient: _sender;
     _amount: Uint128 0;
     is_paused: true
@@ -415,7 +429,7 @@ transition Unpause()
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_UnpauseCallback";
+    _tag: "ZSBT_UnpauseCallback";
     _recipient: _sender;
     _amount: Uint128 0;
     is_paused: false
@@ -437,7 +451,7 @@ transition SetBaseURI(uri: String)
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_SetBaseURICallback"; 
+    _tag: "ZSBT_SetBaseURICallback"; 
     _recipient: _sender;
     _amount: Uint128 0;
     base_uri: uri
@@ -453,8 +467,8 @@ end
 (* @Requirements: *)
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
 transition Mint(to: ByStr20, token_uri: String)
-  RequireNotPaused;
-  MintToken to;
+  RequireNotPaused; 
+  MintToken to; 
   token_id <- token_id_count;
   SetTokenURI token_id token_uri;
 
@@ -466,12 +480,12 @@ transition Mint(to: ByStr20, token_uri: String)
   };
   event e;
   msg_to_recipient = {
-    _tag: "ZRC6_RecipientAcceptMint";
+    _tag: "ZSBT_RecipientAcceptMint";
     _recipient: to;
     _amount: Uint128 0
   };
   msg_to_sender = {
-    _tag: "ZRC6_MintCallback";
+    _tag: "ZSBT_MintCallback";
     _recipient: _sender;
     _amount: Uint128 0;
     to: to;
@@ -501,7 +515,7 @@ transition BatchMint(to_token_uri_pair_list: List (Pair ByStr20 String))
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_BatchMintCallback";
+    _tag: "ZSBT_BatchMintCallback";
     _recipient: _sender;
     _amount: Uint128 0
   };
@@ -524,7 +538,7 @@ transition Burn(token_id: Uint256)
   | Some token_owner =>
     BurnToken token_id;
     msg_to_sender = {
-      _tag: "ZRC6_BurnCallback";
+      _tag: "ZSBT_BurnCallback";
       _recipient: _sender;
       _amount: Uint128 0;
       token_owner: token_owner;
@@ -543,7 +557,7 @@ transition BatchBurn(token_id_list: List Uint256)
   RequireNotPaused;
   forall token_id_list BurnToken;
   msg_to_sender = {
-    _tag: "ZRC6_BatchBurnCallback";
+    _tag: "ZSBT_BatchBurnCallback";
     _recipient: _sender;
     _amount: Uint128 0
   };
@@ -572,7 +586,7 @@ transition AddMinter(minter: ByStr20)
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_AddMinterCallback";
+    _tag: "ZSBT_AddMinterCallback";
     _recipient: _sender;
     _amount: Uint128 0;
     minter: minter
@@ -601,7 +615,7 @@ transition RemoveMinter(minter: ByStr20)
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_RemoveMinterCallback";
+    _tag: "ZSBT_RemoveMinterCallback";
     _recipient: _sender;
     _amount: Uint128 0;
     minter: minter
@@ -653,7 +667,7 @@ transition SetSpender(spender: ByStr20, token_id: Uint256)
     };
     event e;
     msg_to_sender = {
-      _tag: "ZRC6_SetSpenderCallback";
+      _tag: "ZSBT_SetSpenderCallback";
       _recipient: _sender;
       _amount: Uint128 0;
       spender: spender;
@@ -698,7 +712,7 @@ transition AddOperator(operator: ByStr20)
     };
     event e;
     msg_to_sender = {
-      _tag: "ZRC6_AddOperatorCallback";
+      _tag: "ZSBT_AddOperatorCallback";
       _recipient: _sender;
       _amount: Uint128 0;
       operator: operator
@@ -728,7 +742,7 @@ transition RemoveOperator(operator: ByStr20)
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_RemoveOperatorCallback";
+    _tag: "ZSBT_RemoveOperatorCallback";
     _recipient: _sender;
     _amount: Uint128 0;
     operator: operator
@@ -756,7 +770,7 @@ transition SetContractOwnershipRecipient(to: ByStr20)
   };
   event e;
   msg_to_sender = {
-    _tag: "ZRC6_SetContractOwnershipRecipientCallback";
+    _tag: "ZSBT_SetContractOwnershipRecipientCallback";
     _recipient: _sender;
     _amount: Uint128 0;
     to: to
@@ -786,7 +800,7 @@ transition AcceptContractOwnership()
     };
     event e;
     msg_to_sender = {
-      _tag: "ZRC6_AcceptContractOwnershipCallback";
+      _tag: "ZSBT_AcceptContractOwnershipCallback";
       _recipient: _sender;
       _amount: Uint128 0;
       contract_owner: _sender
