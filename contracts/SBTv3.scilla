@@ -126,6 +126,14 @@ with
 (* Defaults to False *)
 field is_paused: Bool = false
 
+(* Contract Owner *)
+(* Defaults to `initial_contract_owner` *)
+field contract_owner: ByStr20 = initial_contract_owner
+
+(* Contract ownership recipient *)
+(* Defaults to `zero_address` *)
+field contract_ownership_recipient: ByStr20 = zero_address
+
 (* Emit Errors *)
 procedure Throw(error: Error)
   e = make_error error;
