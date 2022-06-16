@@ -120,7 +120,31 @@ with
   negb is_invalid
 =>
 
+(* Mutable fields *)
 
+(* Emergency stop mechanism *)
+(* Defaults to False *)
+field is_paused: Bool = false
+
+(* Emit Errors *)
+procedure Throw(error: Error)
+  e = make_error error;
+  throw e
+end
+
+
+procedure RequireNotPaused()
+  (* Reference: *)
+  (* https://consensys.github.io/smart-contract-best-practices/general_philosophy/#prepare-for-failure *)
+  paused <- is_paused;
+  match paused with
+  | False =>
+  | True =>
+    (* Contract is paused *)
+    error = PausedError;
+    Throw error
+  end
+end
 
 procedure UpdateBalance(operation: Operation, address: ByStr20)
   match operation with
@@ -211,7 +235,7 @@ end
 (* @Requirements: *)
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
 transition Mint(to: ByStr20, token_uri: String)
-  (* RequireNotPaused;  *)
+  RequireNotPaused; 
   
   MintToken to; 
   token_id <- token_id_count;
@@ -247,7 +271,7 @@ end
 (* @Requirements: *)
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
 transition Burn(token_id: Uint256)
-  (* RequireNotPaused; *)
+  RequireNotPaused;
   (* Check if token exists *)
   maybe_token_owner <- token_owners[token_id];
   match maybe_token_owner with
@@ -303,3 +327,57 @@ procedure BurnToken(token_id: Uint256)
 end
 
 
+(* Pauses the contract. Use this when things are going wrong ('circuit breaker'). *)
+(* @Requirements: *)
+(* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
+(* - `_sender` must be the contract owner. Otherwise, it must throw `NotContractOwnerError` *)
+transition Pause()
+  RequireNotPaused;
+  (* RequireContractOwner;  Maybe add this later.  *)
+
+  is_paused := true;
+  e = {
+    _eventname: "Pause";
+    is_paused: true
+  };
+  event e;
+  msg_to_sender = {
+    _tag: "ZSBT_PauseCallback";
+    _recipient: _sender;
+    _amount: Uint128 0;
+    is_paused: true
+  };
+  msgs = one_msg msg_to_sender;
+  send msgs
+end
+
+(* Unpauses the contract. *)
+(* @Requirements: *)
+(* - The contract must be paused. Otherwise, it must throw `NotPausedError` *)
+(* - `_sender` must be the contract owner. Otherwise, it must throw `NotContractOwnerError` *)
+transition Unpause()
+
+  paused <- is_paused;
+  match paused with
+  | True =>
+  | False =>
+    error = NotPausedError;
+    Throw error
+  end;
+  (* RequireContractOwner; *)
+
+  is_paused := false;
+  e = {
+    _eventname: "Unpause";
+    is_paused: false
+  };
+  event e;
+  msg_to_sender = {
+    _tag: "ZSBT_UnpauseCallback";
+    _recipient: _sender;
+    _amount: Uint128 0;
+    is_paused: false
+  };
+  msgs = one_msg msg_to_sender;
+  send msgs
+end
