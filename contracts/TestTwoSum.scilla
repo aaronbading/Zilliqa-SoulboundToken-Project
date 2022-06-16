@@ -1,0 +1,30 @@
+scilla_version 0
+
+library TestTwoSum
+
+let one_msg = 
+  fun (msg : Message) => 
+  let nil_msg = Nil {Message} in
+  Cons {Message} msg nil_msg
+
+contract TestTwoSum
+()
+
+transition Test (contractAddress : ByStr20)
+  msg = {_tag : "TwoSum"; _recipient : contractAddress; _amount : Uint128 0; a : Uint32 1; b : Uint32 1};
+  msgs = one_msg msg;
+  send msgs
+end
+
+transition ListenResult (ans : Uint32)
+  two = Uint32 2;
+  is_correct = builtin eq ans two;
+  match is_correct with
+  | True =>
+    e = {_eventname: "TestResult"; result : "Pass"};
+    event e
+  | False =>
+    e = {_eventname: "TestResult"; result : "Fail"};
+    event e
+  end
+end

@@ -1,0 +1,25 @@
+scilla_version 0
+
+library TwoSum
+
+let one_msg = 
+  fun (msg : Message) => 
+    let nil_msg = Nil {Message} in
+    Cons {Message} msg nil_msg
+
+contract TwoSum
+()
+
+transition TwoSum (a : Uint32, b : Uint32)
+
+  (* User implementation start *)
+
+  res = builtin add a b;
+
+  (* User implementation end *)
+
+  m = {_tag : "ListenResult"; _recipient : _sender; _amount : Uint128 0; ans : res};
+  mone = one_msg m;
+  send mone
+  
+end
