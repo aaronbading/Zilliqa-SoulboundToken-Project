@@ -120,3 +120,124 @@ with
   negb is_invalid
 =>
 
+procedure UpdateBalance(operation: Operation, address: ByStr20)
+  match operation with
+  | Add =>
+    maybe_count <- balances[address];
+    new_count = 
+      let cur_count = get_bal maybe_count in
+      (* if overflow occurs, it throws CALL_CONTRACT_FAILED *)
+      builtin add cur_count one;
+    balances[address] := new_count
+  | Sub =>
+    maybe_count <- balances[address];
+    new_count = 
+      let cur_count = get_bal maybe_count in
+      (* if underflow occurs, it throws CALL_CONTRACT_FAILED *)
+      builtin sub cur_count one;
+    balances[address] := new_count
+  end
+end
+
+procedure IsMinter(address: ByStr20)
+has_minter <- exists minters[address];
+match has_minter with
+  | True =>
+  | False =>
+    error = NotMinterError;
+    Throw error
+  end
+end
+
+procedure RequireValidDestination(to: ByStr20)
+  (* Reference: https://github.com/ConsenSys/smart-contract-best-practices/blob/master/docs/tokens.md *)
+  is_zero_address = builtin eq to zero_address;
+  match is_zero_address with
+  | False =>
+  | True =>
+    error = ZeroAddressDestinationError;
+    Throw error
+  end
+end
+
+procedure HasToken(to: ByStr20)
+  tokenbalance <- balances[to];
+  balance = get_bal tokenbalance;
+  owns_token = builtin eq balance zero;
+  match owns_token with
+  | False => 
+    error = MoreThanOneTokenError;
+    Throw error
+    | True =>
+    (* noop *)
+  end
+end
+
+
+(* @Requirements: *)
+(* - `to` must not be the zero address. Otherwise, it must throw `ZeroAddressDestinationError` *)
+(* - `_sender` must be a minter. Otherwise, it must throw `NotMinterError` *)
+procedure MintToken(to: ByStr20)
+  RequireValidDestination to;
+
+  HasToken to;
+
+  IsMinter _sender;
+
+  (* generate ID *)
+  current_token_id_count <- token_id_count;
+  new_token_id_count = builtin add current_token_id_count one; 
+  token_id_count := new_token_id_count;
+  token_id = new_token_id_count;
+
+  (* mint a new token *)
+  token_owners[token_id] := to;
+
+  (* add one to the token owner balance *)
+  UpdateBalance add_operation to;
+  
+  (* add one to the total supply *)
+  current_supply <- total_supply;
+  new_supply = builtin add current_supply one;
+  total_supply := new_supply
+end
+
+(* Mints a token with a specific `token_uri` and transfers it to `to`. *)
+(* Pass empty string to `token_uri` to use the concatenated token URI. i.e. `<base_uri><token_id>`. *)
+(* @param: to - Address of the token recipient *)
+(* @param: token_uri - URI of a token *)
+(* @Requirements: *)
+(* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
+transition Mint(to: ByStr20, token_uri: String)
+  (* RequireNotPaused;  *)
+  
+  MintToken to; 
+  token_id <- token_id_count;
+  SetTokenURI token_id token_uri;
+
+  e = {
+    _eventname: "Mint";
+    to: to;
+    token_id: token_id;
+    token_uri: token_uri
+  };
+  event e;
+  msg_to_recipient = {
+    _tag: "ZSBT_RecipientAcceptMint";
+    _recipient: to;
+    _amount: Uint128 0
+  };
+  msg_to_sender = {
+    _tag: "ZSBT_MintCallback";
+    _recipient: _sender;
+    _amount: Uint128 0;
+    to: to;
+    token_id: token_id;
+    token_uri: token_uri
+  };
+  msgs = two_msgs msg_to_recipient msg_to_sender;
+  send msgs
+end
+
+
+
