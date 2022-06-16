@@ -134,6 +134,12 @@ field contract_owner: ByStr20 = initial_contract_owner
 (* Defaults to `zero_address` *)
 field contract_ownership_recipient: ByStr20 = zero_address
 
+(* The total number of tokens minted *)
+field token_id_count: Uint256 = Uint256 0
+
+(* The total number of existing tokens *)
+field total_supply: Uint256 = Uint256 0
+
 (* Emit Errors *)
 procedure Throw(error: Error)
   e = make_error error;
@@ -203,6 +209,16 @@ match has_minter with
   end
 end
 
+procedure SetTokenURI(token_id: Uint256, token_uri: String)
+  is_empty_string = builtin eq token_uri empty_string;
+  match is_empty_string with 
+  | True => 
+    (* noop *)
+  | False =>
+    token_uris[token_id] := token_uri
+  end
+end
+
 procedure RequireValidDestination(to: ByStr20)
   (* Reference: https://github.com/ConsenSys/smart-contract-best-practices/blob/master/docs/tokens.md *)
   is_zero_address = builtin eq to zero_address;
@@ -226,7 +242,6 @@ procedure HasToken(to: ByStr20)
     (* noop *)
   end
 end
-
 
 (* @Requirements: *)
 (* - `to` must not be the zero address. Otherwise, it must throw `ZeroAddressDestinationError` *)
