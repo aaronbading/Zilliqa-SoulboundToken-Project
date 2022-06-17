@@ -59,11 +59,11 @@ type Error =
   | OperatorNotFoundError
   | OperatorFoundError
   | NotAllowedToTransferError
-  | TokenNotFoundError
   | InvalidFeeBPSError
   | ZeroAddressDestinationError
   | ThisAddressDestinationError
   | MoreThanOneTokenError
+  | LessThanOneTokenError
 
 let make_error =
   fun (result: Error) =>
@@ -82,12 +82,12 @@ let make_error =
       | OperatorNotFoundError              => Int32 -11
       | OperatorFoundError                 => Int32 -12
       | NotAllowedToTransferError          => Int32 -13
-      | TokenNotFoundError                 => Int32 -14
       | InvalidFeeBPSError                 => Int32 -15
       | ZeroAddressDestinationError        => Int32 -16
       | ThisAddressDestinationError        => Int32 -17
       | NotContractOwnershipRecipientError => Int32 -18
       | MoreThanOneTokenError              => Int32 -19
+      | LessThanOneTokenError              => Int32 -20
       end
     in
     { _exception: "Error"; code: result_code }
@@ -134,17 +134,24 @@ field contract_owner: ByStr20 = initial_contract_owner
 (* Defaults to `zero_address` *)
 field contract_ownership_recipient: ByStr20 = zero_address
 
-(* The total number of tokens minted *)
-field token_id_count: Uint256 = Uint256 0
-
 (* The total number of existing tokens *)
 field total_supply: Uint256 = Uint256 0
 
-(* Mapping from token owner to the number of existing tokens *)
+(* Mapping from token owner to their balance  *)
+(* Address to Balance*)
 field balances: Map ByStr20 Uint256 = Emp ByStr20 Uint256
 
-(* Mapping from token ID to its owner *)
+(* Mapping from token ID (total supply at minting) to its owner *)
+(* TokenId to Address *)
 field token_owners: Map Uint256 ByStr20 = Emp Uint256 ByStr20
+
+(* Mapping from to its owner token ID (total supply at minting)  *)
+(* Address to token id *)
+field token_ids: Map ByStr20 Uint256 = Emp ByStr20 Uint256 
+
+(* Token URIs *)
+(* Address to its uri *)
+field token_uris: Map ByStr20 String = Emp ByStr20 String
 
 (* Emit Errors *)
 procedure Throw(error: Error)
@@ -170,6 +177,16 @@ procedure RequireNotSelf(address_a: ByStr20, address_b: ByStr20)
   | True =>
     error = SelfError;
     Throw error
+  end
+end
+
+procedure RequireSelf(address_a: ByStr20, address_b: ByStr20)
+  is_self = builtin eq address_a address_b;
+  match is_self with
+  | False =>
+    error = SelfError;
+    Throw error
+  | True =>
   end
 end
 
@@ -205,13 +222,13 @@ procedure UpdateBalance(operation: Operation, address: ByStr20)
   end
 end
 
-procedure SetTokenURI(token_id: Uint256, token_uri: String)
+procedure SetTokenURI(to: ByStr20, token_uri: String)
   is_empty_string = builtin eq token_uri empty_string;
   match is_empty_string with 
   | True => 
     (* noop *)
   | False =>
-    token_uris[token_id] := token_uri
+    token_uris[to] := token_uri
   end
 end
 
@@ -226,7 +243,8 @@ procedure RequireValidDestination(to: ByStr20)
   end
 end
 
-procedure HasToken(to: ByStr20)
+(* Verifies user doesnt already have token  *)
+procedure HasNoToken(to: ByStr20)
   tokenbalance <- balances[to];
   balance = get_bal tokenbalance;
   owns_token = builtin eq balance zero;
@@ -239,58 +257,68 @@ procedure HasToken(to: ByStr20)
   end
 end
 
+(* Verifies user has a token to burn  *)
+procedure HasToken(to: ByStr20)
+  tokenbalance <- balances[to];
+  balance = get_bal tokenbalance;
+  owns_token = builtin eq balance zero;
+  match owns_token with
+  | False => 
+    (* noop *)
+    | True =>
+    error = LessThanOneTokenError;
+    Throw error
+  end
+end
+
 (* @Requirements: *)
 (* - `to` must not be the zero address. Otherwise, it must throw `ZeroAddressDestinationError` *)
 (* - `_sender` must be a minter. Otherwise, it must throw `NotMinterError` *)
 procedure MintToken(to: ByStr20)
+ (*Check that address is valid*)
   RequireValidDestination to;
-  HasToken to;
+ (*Check that address doesnt have sbt*)
+  HasNoToken to;
 
  (* add one to the total supply *)
   current_supply <- total_supply;
   new_supply = builtin add current_supply one;
-  total_supply := new_supply
+  total_supply := new_supply;
   token_id = new_supply;
 
   (* mint a new token *)
   token_owners[token_id] := to;
-
+  token_ids[to] := token_id;
   (* add one to the token owner balance *)
   UpdateBalance add_operation to;
   
 end
 
 (* @Requirements: *)
-(* - `token_id` must exist. Otherwise, it must throw `TokenNotFoundError` *)
 (* - `_sender` must be a token owner or an operator. Otherwise, it must throw `NotOwnerOrOperatorError` *)
-procedure BurnToken(token_id: Uint256)
-  (* Check if token exists *)
-  maybe_token_owner <- token_owners[token_id];
-  match maybe_token_owner with
-  | None =>
-    error = TokenNotFoundError;
-    Throw error
-  | Some token_owner =>
-    RequireOwnerOrOperator token_owner;
-    (* Destroy existing token *)
-    delete token_owners[token_id];
-    delete token_uris[token_id];
-    delete spenders[token_id];
+procedure BurnToken(to: ByStr20 , Uint256 token_id)
+  
+  (* Destroy existing token *)
+  delete token_owners[token_id];
+  delete token_uris[to];
+  delete token_ids[to];
 
-    (* subtract one from the balance *)
-    UpdateBalance sub_operation token_owner;
-    (* subtract one from the total supply *)
-    current_supply <- total_supply;
-    new_supply = builtin sub current_supply one;
-    total_supply := new_supply;
+  (* subtract one from the balance *)
+  UpdateBalance sub_operation to;
+  (* Delete the addresses balance (likely redundant) *)
+  delete balances[to];
 
-    e = {
-      _eventname: "Burn";
-      token_owner: token_owner;
-      token_id: token_id
-    };
-    event e
-  end
+  (* subtract one from the total supply *)
+  current_supply <- total_supply;
+  new_supply = builtin sub current_supply one;
+  total_supply := new_supply;
+
+  e = {
+    _eventname: "Burn";
+    token_owner: to;
+    token_id: token_id
+  };
+  event e
 end
 
 (* Mints a token with a specific `token_uri` and transfers it to `to`. *)
@@ -301,16 +329,15 @@ end
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
 transition Mint(to: ByStr20, token_uri: String)
   
-RequireNotPaused; 
-MintToken to; 
-
-  token_id <- token_id_count;
-  SetTokenURI token_id token_uri;
+  RequireNotPaused; 
+  MintToken to; 
+  SetTokenURI to token_uri;
+  (* token_id <- total_supply; *)
 
   e = {
     _eventname: "Mint";
     to: to;
-    token_id: token_id;
+    token_id: total_supply;
     token_uri: token_uri
   };
   event e;
@@ -324,7 +351,7 @@ MintToken to;
     _recipient: _sender;
     _amount: Uint128 0;
     to: to;
-    token_id: token_id;
+    token_id: total_supply;
     token_uri: token_uri
   };
   msgs = two_msgs msg_to_recipient msg_to_sender;
@@ -336,26 +363,29 @@ end
 (* @param: token_id - Unique ID of the NFT to be destroyed *)
 (* @Requirements: *)
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
-transition Burn(token_id: Uint256)
+transition Burn(to: ByStr20)
+
+  RequireSelf to _sender;
   RequireNotPaused;
-  (* Check if token exists *)
-  maybe_token_owner <- token_owners[token_id];
-  match maybe_token_owner with
-  | None =>
-    error = TokenNotFoundError;
-    Throw error
-  | Some token_owner =>
-    BurnToken token_id;
-    msg_to_sender = {
-      _tag: "ZSBT_BurnCallback";
-      _recipient: _sender;
-      _amount: Uint128 0;
-      token_owner: token_owner;
-      token_id: token_id
-    };
-    msgs = one_msg msg_to_sender;
-    send msgs
-  end
+  (*Check that address is valid*)
+  RequireValidDestination to;
+  (*Check that address has sbt*)
+  HasToken to;
+  
+  token_id <- token_ids[to]; 
+
+  BurnToken to token_id;
+
+  msg_to_sender = {
+  _tag: "ZSBT_BurnCallback";
+  _recipient: _sender;
+  _amount: Uint128 0;
+  token_owner: token_owner;
+  token_id: token_id
+  };
+  msgs = one_msg msg_to_sender;
+  send msgs
+
 end
 
 (* Pauses the contract. Use this when things are going wrong ('circuit breaker'). *)
@@ -412,7 +442,6 @@ transition Unpause()
   msgs = one_msg msg_to_sender;
   send msgs
 end
-
 
 (* Sets `to` as the contract ownership recipient. *)
 (* To reset `contract_ownership_recipient`, use `zero_address`. *)
