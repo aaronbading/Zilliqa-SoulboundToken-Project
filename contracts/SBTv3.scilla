@@ -354,9 +354,10 @@ transition Burn(to: ByStr20)
   (*Check that address has sbt*)
   HasToken to;
 
-  token_id <- token_ids[to]; 
-
-  (* BurnToken to token_id; *)
+  temp_id <- token_ids[to]; 
+  token_id= get_bal temp_id;
+  
+ BurnToken to token_id;
 
   msg_to_sender = {
   _tag: "ZSBT_BurnCallback";
