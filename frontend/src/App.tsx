@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import AppContainer from "./components/AppContainer";
-import Dummy from "./Dummy";
+import Dummy from "./pages/Dummy";
 import Landing from "./pages/Landing";
 import WalletProvider from "./providers/walletProvider";
 import ZilliqaProvider from "./providers/ZilliqaProvider";

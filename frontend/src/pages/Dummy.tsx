@@ -1,8 +1,8 @@
 import { useState } from "react";
 import cn from "classnames";
-import { useZilliqa } from "./providers/ZilliqaProvider";
-import Button from "./components/Button";
-import Input from "./components/Input";
+import { useZilliqa } from "../providers/ZilliqaProvider";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 const Dummy = () => {
   const { zilliqa } = useZilliqa();
