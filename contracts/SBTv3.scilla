@@ -272,13 +272,13 @@ procedure MintToken(to: ByStr20)
   token_owners[token_id] := to;
   token_ids[to] := token_id;
   (* add one to the token owner balance *)
-  UpdateBalance add_operation to;
+  UpdateBalance add_operation to
   
 end
 
 (* @Requirements: *)
 (* - `_sender` must be a token owner or an operator. Otherwise, it must throw `NotOwnerOrOperatorError` *)
-procedure BurnToken(to: ByStr20 , Uint256 token_id)
+procedure BurnToken(to: ByStr20 ,token_id: Uint256)
   
   (* Destroy existing token *)
   delete token_owners[token_id];
@@ -314,12 +314,12 @@ transition Mint(to: ByStr20, token_uri: String)
   RequireNotPaused; 
   MintToken to; 
   SetTokenURI to token_uri;
-  (* token_id <- total_supply; *)
+  token_id <- total_supply; 
 
   e = {
     _eventname: "Mint";
     to: to;
-    token_id: total_supply;
+    token_id: token_id;
     token_uri: token_uri
   };
   event e;
@@ -333,7 +333,7 @@ transition Mint(to: ByStr20, token_uri: String)
     _recipient: _sender;
     _amount: Uint128 0;
     to: to;
-    token_id: total_supply;
+    token_id: token_id;
     token_uri: token_uri
   };
   msgs = two_msgs msg_to_recipient msg_to_sender;
