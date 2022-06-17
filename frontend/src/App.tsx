@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import AppContainer from "./components/AppContainer";
 import Dummy from "./pages/Dummy";
 import Landing from "./pages/Landing";
+import Profiles from "./pages/Profiles";
 import WalletProvider from "./providers/walletProvider";
 import ZilliqaProvider from "./providers/ZilliqaProvider";
 
@@ -10,9 +11,10 @@ const App = () => {
     <WalletProvider>
       <ZilliqaProvider>
         <Routes>
-          <Route element={<AppContainer />} path="/">
-            <Route path="" element={<Landing />} />
-            <Route path="dummy" element={<Dummy />} />
+          <Route element={<AppContainer />}>
+            <Route path="/" element={<Landing />} />
+            <Route path="/profiles" element={<Profiles />} />
+            <Route path="/dummy" element={<Dummy />} />
           </Route>
         </Routes>
       </ZilliqaProvider>
