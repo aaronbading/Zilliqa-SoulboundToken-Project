@@ -356,13 +356,13 @@ transition Burn(to: ByStr20)
 
   token_id <- token_ids[to]; 
 
-  BurnToken to token_id;
+  (* BurnToken to token_id; *)
 
   msg_to_sender = {
   _tag: "ZSBT_BurnCallback";
   _recipient: _sender;
   _amount: Uint128 0;
-  token_owner: token_owner;
+  token_owner: to;
   token_id: token_id
   };
   msgs = one_msg msg_to_sender;
