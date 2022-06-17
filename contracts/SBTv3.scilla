@@ -123,11 +123,11 @@ field total_supply: Uint256 = Uint256 0
 (* Address to Balance*)
 field balances: Map ByStr20 Uint256 = Emp ByStr20 Uint256
 
-(* Mapping from token ID (total supply at minting) to its owner *)
+(* Mapping from token ID (totalsupply+1 at minting) to its owner address *)
 (* TokenId to Address *)
 field token_owners: Map Uint256 ByStr20 = Emp Uint256 ByStr20
 
-(* Mapping from to its owner token ID (total supply at minting)  *)
+(* Mapping from to its owner to token ID (total supply at minting)  *)
 (* Address to token id *)
 field token_ids: Map ByStr20 Uint256 = Emp ByStr20 Uint256 
 
@@ -140,7 +140,6 @@ procedure Throw(error: Error)
   e = make_error error;
   throw e
 end
-
 procedure RequireContractOwner()
   cur_owner <- contract_owner;
   is_contract_owner = builtin eq cur_owner _sender;
@@ -185,6 +184,7 @@ procedure RequireNotPaused()
   end
 end
 
+(*Increments/Decrements address's balance depending on op *)
 procedure UpdateBalance(operation: Operation, address: ByStr20)
   match operation with
   | Add =>
@@ -204,6 +204,7 @@ procedure UpdateBalance(operation: Operation, address: ByStr20)
   end
 end
 
+(* Set URI for a given address *)
 procedure SetTokenURI(to: ByStr20, token_uri: String)
   is_empty_string = builtin eq token_uri empty_string;
   match is_empty_string with 
@@ -255,7 +256,6 @@ end
 
 (* @Requirements: *)
 (* - `to` must not be the zero address. Otherwise, it must throw `ZeroAddressDestinationError` *)
-(* - `_sender` must be a minter. Otherwise, it must throw `NotMinterError` *)
 procedure MintToken(to: ByStr20)
  (*Check that address is valid*)
   RequireValidDestination to;
@@ -276,8 +276,6 @@ procedure MintToken(to: ByStr20)
   
 end
 
-(* @Requirements: *)
-(* - `_sender` must be a token owner or an operator. Otherwise, it must throw `NotOwnerOrOperatorError` *)
 procedure BurnToken(to: ByStr20 ,token_id: Uint256)
   
   (* Destroy existing token *)
@@ -310,7 +308,7 @@ end
 (* @Requirements: *)
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
 transition Mint(to: ByStr20, token_uri: String)
-  
+(* TODO ADD EXTRA PARAMETERS  *)
   RequireNotPaused; 
   MintToken to; 
   SetTokenURI to token_uri;
@@ -341,10 +339,10 @@ transition Mint(to: ByStr20, token_uri: String)
 end
 
 
-(* Destroys `token_id`. *)
-(* @param: token_id - Unique ID of the NFT to be destroyed *)
+(* @param: to  - The address of the burner  *)
 (* @Requirements: *)
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
+(* - The contract must be called by the address that is passed in as Parameter *)
 transition Burn(to: ByStr20)
 
   RequireSelf to _sender;
@@ -355,7 +353,8 @@ transition Burn(to: ByStr20)
   HasToken to;
 
   temp_id <- token_ids[to]; 
-  token_id= get_bal temp_id;
+
+  token_id= get_bal temp_id; 
   
  BurnToken to token_id;
 
@@ -484,3 +483,6 @@ transition AcceptContractOwnership()
     send msgs
   end
 end
+
+
+(* TODO ADD GETTERS AND SETTERS FOR DATA  *)
