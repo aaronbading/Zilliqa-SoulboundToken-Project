@@ -7,9 +7,12 @@ export const CHAIN_ID = 222;
 export const MSG_VERSION = 1;
 export const VERSION = bytes.pack(CHAIN_ID, MSG_VERSION);
 
-const CODE_PATH = "contract/HelloWorld.scilla";
+const CODE_PATH = "contracts/HelloWorld.scilla";
 export const CODE = fs.readFileSync(CODE_PATH).toString();
 
+export function getContractCode(path: string) {
+  return fs.readFileSync(path).toString();
+}
 export const TOKEN_NAME = "TEST";
 export const TOKEN_SYMBOL = "T";
 

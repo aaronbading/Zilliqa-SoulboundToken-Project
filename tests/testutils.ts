@@ -11,3 +11,18 @@ export const expectEvents = (events, want) => {
     expect(JSON.stringify(event.params)).toBe(JSON.stringify(wantParams));
   }
 };
+
+export const expectTransitions = (transitions, want) => {
+  if (transitions === undefined) {
+    expect(undefined).toBe(want);
+  }
+  for (const [index, transition] of transitions.entries()) {
+    const { msg } = transition;
+    expect(want[index].tag).toBe(want[index].tag);
+    const wantParams = scillaJSONParams(want[index].getParams());
+    expect(JSON.stringify(msg.params)).toBe(JSON.stringify(wantParams));
+    if (want.addr) {
+      expect(transition.addr).toBe(want.addr);
+    }
+  }
+};
