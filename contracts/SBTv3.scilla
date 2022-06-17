@@ -49,19 +49,10 @@ type Error =
   | PausedError
   | SelfError
   | NotContractOwnerError
-  | NotContractOwnershipRecipientError
-  | NotTokenOwnerError
   | NotMinterError
   | NotOwnerOrOperatorError
-  | MinterNotFoundError
-  | MinterFoundError
-  | SpenderFoundError
-  | OperatorNotFoundError
-  | OperatorFoundError
-  | NotAllowedToTransferError
-  | InvalidFeeBPSError
   | ZeroAddressDestinationError
-  | ThisAddressDestinationError
+  | NotContractOwnershipRecipientError
   | MoreThanOneTokenError
   | LessThanOneTokenError
 
@@ -73,21 +64,12 @@ let make_error =
       | PausedError                        => Int32 -2
       | SelfError                          => Int32 -3
       | NotContractOwnerError              => Int32 -4
-      | NotTokenOwnerError                 => Int32 -5
-      | NotMinterError                     => Int32 -6
-      | NotOwnerOrOperatorError            => Int32 -7
-      | MinterNotFoundError                => Int32 -8
-      | MinterFoundError                   => Int32 -9
-      | SpenderFoundError                  => Int32 -10
-      | OperatorNotFoundError              => Int32 -11
-      | OperatorFoundError                 => Int32 -12
-      | NotAllowedToTransferError          => Int32 -13
-      | InvalidFeeBPSError                 => Int32 -15
-      | ZeroAddressDestinationError        => Int32 -16
-      | ThisAddressDestinationError        => Int32 -17
-      | NotContractOwnershipRecipientError => Int32 -18
-      | MoreThanOneTokenError              => Int32 -19
-      | LessThanOneTokenError              => Int32 -20
+      | NotMinterError                     => Int32 -5
+      | NotOwnerOrOperatorError            => Int32 -6
+      | ZeroAddressDestinationError        => Int32 -7
+      | NotContractOwnershipRecipientError => Int32 -8
+      | MoreThanOneTokenError              => Int32 -9
+      | LessThanOneTokenError              => Int32 -10
       end
     in
     { _exception: "Error"; code: result_code }
@@ -371,7 +353,7 @@ transition Burn(to: ByStr20)
   RequireValidDestination to;
   (*Check that address has sbt*)
   HasToken to;
-  
+
   token_id <- token_ids[to]; 
 
   BurnToken to token_id;
