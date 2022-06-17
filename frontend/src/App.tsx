@@ -11,8 +11,8 @@ const App = () => {
       <ZilliqaProvider>
         <Routes>
           <Route element={<AppContainer />} path="/">
-            <Route path="/" element={<Landing />} />
-            <Route path="/dummy" element={<Dummy />} />
+            <Route path="" element={<Landing />} />
+            <Route path="dummy" element={<Dummy />} />
           </Route>
         </Routes>
       </ZilliqaProvider>

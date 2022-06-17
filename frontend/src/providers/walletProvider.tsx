@@ -1,41 +1,47 @@
-import React, {createContext, useContext, useState} from 'react'
-const walletProvider=createContext({})
-interface Props {
-    children?: React.ReactNode
-}
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
+
 declare global {
-  interface Window{
-    zilPay?: any
+  interface Window {
+    zilPay?: any;
   }
 }
 
-const zilPay=window.zilPay
+interface Props {
+  children?: React.ReactNode;
+}
 
-function WalletProvider({children}:Props) {
-    //wallet address
-    const [walletAddress, setWallet]=useState('')
+const walletProvider = createContext({});
 
-  const connectWallet=async()=>{
-    if(window.zilPay){
-       await zilPay.wallet.connect()
-       setWallet(zilPay.wallet.defaultAccount.base16)
-    }else{
-      alert('Install ZillPay Wallet')
+const zilPay = window.zilPay;
+
+function WalletProvider({ children }: Props) {
+  const [wallet, setWallet] = useState<any>();
+
+  const connect = useCallback(async () => {
+    if (zilPay) {
+      await zilPay.wallet.connect();
+      setWallet(zilPay.wallet);
+    } else {
+      alert("Install ZillPay Wallet");
     }
-  }
-  const disConnectWallet=async()=>{
-    if(window.zilPay){
-       await zilPay.wallet.disconnect()
-       setWallet('')
+  }, []);
+
+  const disconnect = async () => {
+    if (window.zilPay) {
+      await zilPay.wallet.disconnect();
+      setWallet(null);
     }
-  }
+  };
+
+  const value = useMemo(() => {
+    return { wallet, connect, disconnect };
+  }, [wallet, connect]);
 
   return (
-    <walletProvider.Provider value={{walletAddress, setWallet, connectWallet, disConnectWallet}}>
-        {children}
-    </walletProvider.Provider>
-  )
+    <walletProvider.Provider value={value}>{children}</walletProvider.Provider>
+  );
 }
 
-export default WalletProvider
-export const useWalletProvider=():any=>useContext(walletProvider)
+export default WalletProvider;
+
+export const useWallet = (): any => useContext(walletProvider);
