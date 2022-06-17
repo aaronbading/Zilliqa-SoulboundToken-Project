@@ -13,7 +13,7 @@ type Profile = {
 
 export default function Profiles() {
   const { zilliqa } = useZilliqa();
-  const [profiles, setprofiles] = useState<Profile[] | null>(null);
+  const [profiles, setProfiles] = useState<Profile[] | null>(null);
 
   const getZBTStates = useCallback(async () => {
     const states = await zilliqa.contracts
@@ -31,7 +31,7 @@ export default function Profiles() {
       _profiles.push(profile);
     }
 
-    setprofiles(_profiles);
+    setProfiles(_profiles);
   }, [zilliqa.contracts]);
 
   useEffect(() => {
