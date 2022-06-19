@@ -18,13 +18,12 @@ const Dummy = () => {
   };
 
   return (
-    <div className={cn("flex","flex-col","items-center", "mt-8")}>
-      <Input
-        onChange={(e) => setAddress(e.target.value)}
-        value={address}
-      />{" "}
+    <div className={cn("flex", "flex-col", "items-center", "mt-8")}>
+      <Input onChange={(e) => setAddress(e.target.value)} value={address} />{" "}
       (try: 0xa6BdD5f222f678808eCC4E34Bc34E5f0c7204044)
-      <p className={cn("my-4")}>Balance: {isLoading ? "Loading..." : balance}</p>
+      <p className={cn("my-4")}>
+        Balance: {isLoading ? "Loading..." : balance}
+      </p>
       <Button onClick={() => getWalletBalance()}>Get Balance</Button>
     </div>
   );

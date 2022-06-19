@@ -4,12 +4,7 @@ import Table from "../components/Table/Table";
 import TableCell from "../components/Table/TableCell";
 import TableHead from "../components/Table/TableHead";
 import { useZilliqa } from "../providers/ZilliqaProvider";
-
-type Profile = {
-  address: string;
-  profile_uri: string;
-  data_uri: string;
-};
+import { Profile } from "../types";
 
 export default function Profiles() {
   const { zilliqa } = useZilliqa();
@@ -19,7 +14,7 @@ export default function Profiles() {
     const states = await zilliqa.contracts
       .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
       .getState();
-    
+
     const _profiles = [];
     for (let address in states.token_uris) {
       const profile = {
@@ -48,13 +43,16 @@ export default function Profiles() {
             <TableHead>Owner Address</TableHead>
             <TableHead>Profle_URI</TableHead>
             <TableHead>Data_URI</TableHead>
-
           </tr>
         </thead>
         <tbody>
           {profiles.map(({ address, profile_uri, data_uri }) => (
             <tr key={address}>
-              <TableCell isIndex={true}>{address}</TableCell>
+              <a href={`/profiles/${address}`}>
+                <TableCell className="text-blue-600 underline" isIndex={true}>
+                  {address}
+                </TableCell>
+              </a>
               <TableCell>{profile_uri}</TableCell>
               <TableCell>{data_uri}</TableCell>
             </tr>
