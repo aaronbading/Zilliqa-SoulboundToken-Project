@@ -84,7 +84,6 @@ let make_error =
 contract SoulBoundToken
 (
   initial_contract_owner: ByStr20,
-  initial_base_uri: String, (*website *)
   name: String,
   symbol: String
 )
@@ -275,7 +274,6 @@ procedure MintToken(to: ByStr20)
 end
 
 procedure BurnToken(to: ByStr20)
-  
   (* Destroy existing token *)
   delete token_uris[to][zero];
   delete token_uris[to][one];
@@ -304,8 +302,8 @@ end
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
 (* - The URI params mustn't be empty strings . Otherwise , it will throw 'EmptyString' error *)
 transition Mint(to: ByStr20, picture_uri: String, data_uri: String)
-(* TODO ADD EXTRA PARAMETERS  *)
-  RequireNotPaused; 
+  RequireNotPaused;
+  RequireSelf to _sender;
   MintToken to; 
   SetURI to picture_uri data_uri;
 
@@ -319,11 +317,6 @@ transition Mint(to: ByStr20, picture_uri: String, data_uri: String)
   };
   event e;
 
-  msg_to_recipient = {
-    _tag: "ZSBT_RecipientAcceptMint";
-    _recipient: to;
-    _amount: Uint128 0
-  };
   msg_to_sender = {
     _tag: "ZSBT_MintCallback";
     _recipient: _sender;
@@ -332,7 +325,8 @@ transition Mint(to: ByStr20, picture_uri: String, data_uri: String)
     picture_uri: picture_uri;
     data_uri: data_uri
   };
-  msgs = two_msgs msg_to_recipient msg_to_sender;
+  
+  msgs = one_msg msg_to_sender;
   send msgs
 end
 
@@ -353,6 +347,53 @@ transition Burn(to: ByStr20)
 
   msg_to_sender = {
   _tag: "ZSBT_BurnCallback";
+  _recipient: _sender;
+  _amount: Uint128 0;
+  token_owner: to
+  };
+  msgs = one_msg msg_to_sender;
+  send msgs
+end
+
+
+(* @param: to  - The address of the profile  *)
+(* @param: picture_uri  - URI of the new picture  *)
+(* @Requirements: *)
+(* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
+(* - The contract must be called by the address that is passed in as Parameter *)
+transition ChangeProfilePicture(to: ByStr20 , picture_uri: String)
+  RequireNotPaused;
+  (*Check that address is valid*)
+  RequireValidDestination to;
+  RequireSelf to _sender;
+  (*Check that address has sbt*)
+  HasToken to;
+  token_uris[to][zero] := picture_uri;
+  msg_to_sender = {
+  _tag: "ZSBT_ChangeProfilePictureCallback";
+  _recipient: _sender;
+  _amount: Uint128 0;
+  token_owner: to
+  };
+  msgs = one_msg msg_to_sender;
+  send msgs
+end
+
+(* @param: to  - The address of the profile  *)
+(* @param: picture_uri  - URI of the new picture  *)
+(* @Requirements: *)
+(* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
+(* - The contract must be called by the address that is passed in as Parameter *)
+transition ChangeData(to: ByStr20 , data_uri: String)
+  RequireNotPaused;
+  (*Check that address is valid*)
+  RequireValidDestination to;
+  RequireSelf to _sender;
+  (*Check that address has sbt*)
+  HasToken to;
+  token_uris[to][one] := data_uri;
+  msg_to_sender = {
+  _tag: "ZSBT_ChangeDataeCallback";
   _recipient: _sender;
   _amount: Uint128 0;
   token_owner: to
