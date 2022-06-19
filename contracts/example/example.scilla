@@ -1,0 +1,12 @@
+scilla_version 0
+
+library Example
+
+
+contract Example()
+
+field achieved : Bool = False
+
+transition ExampleWithParams(int_value: Uint256, bystr_value: ByStr20)
+
+end

@@ -1,0 +1,39 @@
+scilla_version 0
+
+(***************************************************)
+(*               Associated library                *)
+(***************************************************)
+
+import BoolUtils as BoolU
+library Proxy
+
+
+let one_msg = 
+  fun (msg : Message) => 
+    let nil_msg = Nil {Message} in
+    Cons {Message} msg nil_msg
+    
+    
+let late_to_bid_code = Int32 1
+
+(***************************************************)
+(*             The contract definition             *)
+(***************************************************)
+contract Proxy()
+  (* Mutable fields *)
+
+field ended : Bool = False
+
+transition ProxyPressButton(example_contract_address: ByStr20)
+    i_value = Uint256 44;
+    b_value = example_contract_address;
+    example_contract_call = {
+        _tag: "ExampleWithParams";
+        _recipient: example_contract_address;
+        _amount: Uint128 0;
+        int_value: i_value;
+        bystr_value: b_value
+    };
+    msgs = one_msg example_contract_call;
+    send msgs
+end
