@@ -27,6 +27,7 @@ field ended : Bool = False
 transition ProxyPressButton(example_contract_address: ByStr20)
     i_value = Uint256 44;
     b_value = example_contract_address;
+    
     example_contract_call = {
         _tag: "ExampleWithParams";
         _recipient: example_contract_address;

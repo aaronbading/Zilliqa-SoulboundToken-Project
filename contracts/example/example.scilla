@@ -2,11 +2,31 @@ scilla_version 0
 
 library Example
 
+(* Library functions *)
+let zero = Uint256 0
+let one = Uint256 1
+let zero_address = 0x0000000000000000000000000000000000000000
+
+let one_msg = 
+  fun (msg: Message) => 
+    let nil_msg = Nil {Message} in
+    Cons {Message} msg nil_msg
 
 contract Example()
 
 field achieved : Bool = False
+field value : Uint256 = zero
+field address: ByStr20 = zero_address
 
 transition ExampleWithParams(int_value: Uint256, bystr_value: ByStr20)
+
+value:=int_value;
+address:=bystr_value;
+ e = {
+    _eventname: "ChangesHappening";
+    address: bystr_value;
+    new_value: int_value
+  };
+  event e
 
 end
