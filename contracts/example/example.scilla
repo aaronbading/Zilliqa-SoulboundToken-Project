@@ -7,17 +7,14 @@ let zero = Uint256 0
 let one = Uint256 1
 let zero_address = 0x0000000000000000000000000000000000000000
 
-let one_msg = 
-  fun (msg: Message) => 
-    let nil_msg = Nil {Message} in
-    Cons {Message} msg nil_msg
-
 contract Example()
 
 field achieved : Bool = False
 field value : Uint256 = zero
 field address: ByStr20 = zero_address
 
+(* This is the transition that is called from our proxy contract. *)
+(* It sets the mutable values of this contract.  *)
 transition ExampleWithParams(int_value: Uint256, bystr_value: ByStr20)
 
 value:=int_value;

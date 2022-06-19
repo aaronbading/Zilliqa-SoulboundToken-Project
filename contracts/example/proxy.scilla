@@ -1,29 +1,20 @@
 scilla_version 0
 
-(***************************************************)
-(*               Associated library                *)
-(***************************************************)
-
 import BoolUtils as BoolU
 library Proxy
-
 
 let one_msg = 
   fun (msg : Message) => 
     let nil_msg = Nil {Message} in
     Cons {Message} msg nil_msg
     
-    
-let late_to_bid_code = Int32 1
-
-(***************************************************)
-(*             The contract definition             *)
-(***************************************************)
 contract Proxy()
-  (* Mutable fields *)
 
 field ended : Bool = False
 
+(* This is a transition that calls a transition of another contract *)
+(* Specifically , it calls ExampleWithParams of the contract that is specified in the parameter example_contract_address *)
+(* Reference --->> https://scilla-cookbook.org/recipes/scilla-recipes/messages *)
 transition ProxyPressButton(example_contract_address: ByStr20)
     i_value = Uint256 44;
     b_value = example_contract_address;
