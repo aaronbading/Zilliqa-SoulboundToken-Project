@@ -55,6 +55,7 @@ type Error =
   | NotContractOwnershipRecipientError
   | MoreThanOneTokenError
   | LessThanOneTokenError
+  | EmptyURI
 
 let make_error =
   fun (result: Error) =>
@@ -70,6 +71,7 @@ let make_error =
       | NotContractOwnershipRecipientError => Int32 -8
       | MoreThanOneTokenError              => Int32 -9
       | LessThanOneTokenError              => Int32 -10
+      | EmptyURI                           => Int32 -11
       end
     in
     { _exception: "Error"; code: result_code }
@@ -123,17 +125,11 @@ field total_supply: Uint256 = Uint256 0
 (* Address to Balance*)
 field balances: Map ByStr20 Uint256 = Emp ByStr20 Uint256
 
-(* Mapping from token ID (totalsupply+1 at minting) to its owner address *)
-(* TokenId to Address *)
-field token_owners: Map Uint256 ByStr20 = Emp Uint256 ByStr20
-
-(* Mapping from to its owner to token ID (total supply at minting)  *)
-(* Address to token id *)
-field token_ids: Map ByStr20 Uint256 = Emp ByStr20 Uint256 
-
 (* Token URIs *)
-(* Address to its uri *)
-field token_uris: Map ByStr20 String = Emp ByStr20 String
+(* Address[0] == ProfilePictureURI*)
+(* Address[1] == ProfileDataURI*)
+field token_uris: Map ByStr20 (Map Uint256 String)
+  = Emp ByStr20 (Map Uint256 String)
 
 (* Emit Errors *)
 procedure Throw(error: Error)
@@ -205,13 +201,18 @@ procedure UpdateBalance(operation: Operation, address: ByStr20)
 end
 
 (* Set URI for a given address *)
-procedure SetTokenURI(to: ByStr20, token_uri: String)
-  is_empty_string = builtin eq token_uri empty_string;
+procedure SetURI(to: ByStr20, picture_uri: String , data_uri: String)
+  is_profile_empty_string = builtin eq picture_uri empty_string;
+  is_data_empty_string = builtin eq data_uri empty_string;
+  is_empty_string = orb is_profile_empty_string is_data_empty_string;
   match is_empty_string with 
   | True => 
     (* noop *)
+    error = EmptyURI;
+    Throw error
   | False =>
-    token_uris[to] := token_uri
+    token_uris[to][zero] := picture_uri;
+    token_uris[to][one] := data_uri
   end
 end
 
@@ -268,26 +269,20 @@ procedure MintToken(to: ByStr20)
   total_supply := new_supply;
   token_id = new_supply;
 
-  (* mint a new token *)
-  token_owners[token_id] := to;
-  token_ids[to] := token_id;
   (* add one to the token owner balance *)
   UpdateBalance add_operation to
   
 end
 
-procedure BurnToken(to: ByStr20 ,token_id: Uint256)
+procedure BurnToken(to: ByStr20)
   
   (* Destroy existing token *)
-  delete token_owners[token_id];
-  delete token_uris[to];
-  delete token_ids[to];
-
+  delete token_uris[to][zero];
+  delete token_uris[to][one];
   (* subtract one from the balance *)
   UpdateBalance sub_operation to;
   (* Delete the addresses balance (likely redundant) *)
   delete balances[to];
-
   (* subtract one from the total supply *)
   current_supply <- total_supply;
   new_supply = builtin sub current_supply one;
@@ -296,31 +291,34 @@ procedure BurnToken(to: ByStr20 ,token_id: Uint256)
   e = {
     _eventname: "Burn";
     token_owner: to;
-    token_id: token_id
+    total_supply: new_supply
   };
   event e
 end
 
-(* Mints a token with a specific `token_uri` and transfers it to `to`. *)
-(* Pass empty string to `token_uri` to use the concatenated token URI. i.e. `<base_uri><token_id>`. *)
+(* Mints a token with a specific `picture_uri` & `data_uri` and transfers it to `to`. *)
 (* @param: to - Address of the token recipient *)
-(* @param: token_uri - URI of a token *)
+(* @param: picture_uri - URI of a profile picture *)
+(* @param: data_uri - URI of a json that contains users data *)
 (* @Requirements: *)
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
-transition Mint(to: ByStr20, token_uri: String)
+(* - The URI params mustn't be empty strings . Otherwise , it will throw 'EmptyString' error *)
+transition Mint(to: ByStr20, picture_uri: String, data_uri: String)
 (* TODO ADD EXTRA PARAMETERS  *)
   RequireNotPaused; 
   MintToken to; 
-  SetTokenURI to token_uri;
-  token_id <- total_supply; 
+  SetURI to picture_uri data_uri;
 
+  totalsupply_at_mint <- total_supply; 
   e = {
     _eventname: "Mint";
     to: to;
-    token_id: token_id;
-    token_uri: token_uri
+    totalsupply_at_mint: totalsupply_at_mint;
+    picture_uri: picture_uri;
+    data_uri: data_uri
   };
   event e;
+
   msg_to_recipient = {
     _tag: "ZSBT_RecipientAcceptMint";
     _recipient: to;
@@ -331,8 +329,8 @@ transition Mint(to: ByStr20, token_uri: String)
     _recipient: _sender;
     _amount: Uint128 0;
     to: to;
-    token_id: token_id;
-    token_uri: token_uri
+    picture_uri: picture_uri;
+    data_uri: data_uri
   };
   msgs = two_msgs msg_to_recipient msg_to_sender;
   send msgs
@@ -344,30 +342,23 @@ end
 (* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
 (* - The contract must be called by the address that is passed in as Parameter *)
 transition Burn(to: ByStr20)
-
-  RequireSelf to _sender;
   RequireNotPaused;
   (*Check that address is valid*)
   RequireValidDestination to;
+  RequireSelf to _sender;
+  
   (*Check that address has sbt*)
   HasToken to;
-
-  temp_id <- token_ids[to]; 
-
-  token_id= get_bal temp_id; 
-  
- BurnToken to token_id;
+  BurnToken to;
 
   msg_to_sender = {
   _tag: "ZSBT_BurnCallback";
   _recipient: _sender;
   _amount: Uint128 0;
-  token_owner: to;
-  token_id: token_id
+  token_owner: to
   };
   msgs = one_msg msg_to_sender;
   send msgs
-
 end
 
 (* Pauses the contract. Use this when things are going wrong ('circuit breaker'). *)
@@ -435,7 +426,7 @@ end
 transition SetContractOwnershipRecipient(to: ByStr20)
   RequireContractOwner;
   RequireNotSelf to _sender;
-  
+
   contract_ownership_recipient := to;
 
   e = {
@@ -483,6 +474,3 @@ transition AcceptContractOwnership()
     send msgs
   end
 end
-
-
-(* TODO ADD GETTERS AND SETTERS FOR DATA  *)
