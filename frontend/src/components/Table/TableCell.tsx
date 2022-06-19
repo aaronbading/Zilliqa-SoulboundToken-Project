@@ -4,9 +4,11 @@ import cn from "classnames";
 const TableCell = ({
   children,
   isIndex = true,
+  className,
 }: {
   children: React.ReactNode;
   isIndex?: boolean;
+  className?: string;
 }) => {
   return (
     <td
@@ -18,7 +20,8 @@ const TableCell = ({
               "whitespace-nowrap",
               "text-sm",
               "font-medium",
-              "text-gray-900"
+              "text-gray-900",
+              className
             )
           : cn(
               "text-sm",
@@ -26,7 +29,8 @@ const TableCell = ({
               "font-light",
               "px-6",
               "py-4",
-              "whitespace-nowrap"
+              "whitespace-nowrap",
+              className
             )
       }
     >
