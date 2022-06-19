@@ -7,8 +7,8 @@ import { useZilliqa } from "../providers/ZilliqaProvider";
 
 type Profile = {
   address: string;
-  id: number;
-  uri: string;
+  profile_uri: string;
+  data_uri: string;
 };
 
 export default function Profiles() {
@@ -17,16 +17,15 @@ export default function Profiles() {
 
   const getZBTStates = useCallback(async () => {
     const states = await zilliqa.contracts
-      .at("0x9e74a5a37a7510c1be676c7448bde49e464f5547")
+      .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
       .getState();
-
+    
     const _profiles = [];
-    for (let address in states.token_ids) {
-      const tokenId = states.token_ids[address];
+    for (let address in states.token_uris) {
       const profile = {
         address,
-        id: tokenId,
-        uri: states.token_uris[address],
+        profile_uri: states.token_uris[address][0],
+        data_uri: states.token_uris[address][1],
       };
       _profiles.push(profile);
     }
@@ -46,17 +45,18 @@ export default function Profiles() {
       <Table>
         <thead className="border-b bg-gray-800">
           <tr>
-            <TableHead>ID</TableHead>
             <TableHead>Owner Address</TableHead>
-            <TableHead>URI</TableHead>
+            <TableHead>Profle_URI</TableHead>
+            <TableHead>Data_URI</TableHead>
+
           </tr>
         </thead>
         <tbody>
-          {profiles.map(({ id, address, uri }) => (
-            <tr key={id}>
-              <TableCell isIndex={true}>{id}</TableCell>
-              <TableCell>{address}</TableCell>
-              <TableCell>{uri}</TableCell>
+          {profiles.map(({ address, profile_uri, data_uri }) => (
+            <tr key={address}>
+              <TableCell isIndex={true}>{address}</TableCell>
+              <TableCell>{profile_uri}</TableCell>
+              <TableCell>{data_uri}</TableCell>
             </tr>
           ))}
         </tbody>
