@@ -130,6 +130,10 @@ field balances: Map ByStr20 Uint256 = Emp ByStr20 Uint256
 field token_uris: Map ByStr20 (Map Uint256 String)
   = Emp ByStr20 (Map Uint256 String)
 
+  (*All achievements   *)
+field achievements_bool: Map ByStr20 Uint256 = Emp ByStr20 Uint256
+
+
 (* Emit Errors *)
 procedure Throw(error: Error)
   e = make_error error;
@@ -277,6 +281,7 @@ procedure BurnToken(to: ByStr20)
   (* Destroy existing token *)
   delete token_uris[to][zero];
   delete token_uris[to][one];
+  delete achievements_bool[to];
   (* subtract one from the balance *)
   UpdateBalance sub_operation to;
   (* Delete the addresses balance (likely redundant) *)
@@ -306,7 +311,7 @@ transition Mint(to: ByStr20, picture_uri: String, data_uri: String)
   RequireSelf to _sender;
   MintToken to; 
   SetURI to picture_uri data_uri;
-
+  achievements_bool[to] := zero;
   totalsupply_at_mint <- total_supply; 
   e = {
     _eventname: "Mint";
@@ -349,7 +354,7 @@ transition Burn(to: ByStr20)
   _tag: "ZSBT_BurnCallback";
   _recipient: _sender;
   _amount: Uint128 0;
-  token_owner: to
+  value: to
   };
   msgs = one_msg msg_to_sender;
   send msgs
@@ -373,7 +378,7 @@ transition ChangeProfilePicture(to: ByStr20 , picture_uri: String)
   _tag: "ZSBT_ChangeProfilePictureCallback";
   _recipient: _sender;
   _amount: Uint128 0;
-  token_owner: to
+  value: to
   };
   msgs = one_msg msg_to_sender;
   send msgs
@@ -396,11 +401,38 @@ transition ChangeData(to: ByStr20 , data_uri: String)
   _tag: "ZSBT_ChangeDataeCallback";
   _recipient: _sender;
   _amount: Uint128 0;
-  token_owner: to
+  value: to
   };
   msgs = one_msg msg_to_sender;
   send msgs
 end
+
+(* @param: to  - The address of the profile  *)
+(* @param: value  - Bool for achievement   *)
+(* @Requirements: *)
+(* - The contract must not be paused. Otherwise, it must throw `PausedError` *)
+(* - The contract must be called by the address that is passed in as Parameter *)
+transition Earn_achievement(to: ByStr20 , value: Uint256)
+  RequireNotPaused;
+  (*Check that address is valid*)
+  RequireValidDestination to;
+
+  RequireNotSelf to _sender;
+  (*Check that address has sbt*)
+  HasToken to;
+
+  achievements_bool[to] := value;
+  msg_to_sender = {
+  _tag: "ZSBT_EarnAchievementCallback";
+  _recipient: _sender;
+  _amount: Uint128 0;
+  user: to;
+  achievement_earned: value
+  };
+  msgs = one_msg msg_to_sender;
+  send msgs
+end
+
 
 (* Pauses the contract. Use this when things are going wrong ('circuit breaker'). *)
 (* @Requirements: *)

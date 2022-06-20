@@ -10,21 +10,18 @@ let one_msg =
     
 contract Proxy()
 
-field ended : Bool = False
-
 (* This is a transition that calls a transition of another contract *)
 (* Specifically , it calls ExampleWithParams of the contract that is specified in the parameter example_contract_address *)
 (* Reference --->> https://scilla-cookbook.org/recipes/scilla-recipes/messages *)
 transition ProxyPressButton(example_contract_address: ByStr20)
-    i_value = Uint256 44;
-    b_value = example_contract_address;
-    
+    earn_achievement = Uint256 1;
+
     example_contract_call = {
-        _tag: "ExampleWithParams";
+        _tag: "Earn_achievement";
         _recipient: example_contract_address;
         _amount: Uint128 0;
-        int_value: i_value;
-        bystr_value: b_value
+        to: example_contract_address;
+        value: earn_achievement
     };
     msgs = one_msg example_contract_call;
     send msgs
