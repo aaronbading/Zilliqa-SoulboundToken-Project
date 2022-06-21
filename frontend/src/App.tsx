@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import AppContainer from "./components/AppContainer";
 import Dummy from "./pages/Dummy";
 import Landing from "./pages/Landing";
-import Minting from "./pages/Minting";
+import Minting from "./pages/CreateProfile";
 import ProfileDetail from "./pages/ProfileDetail";
 import Profiles from "./pages/Profiles";
 import WalletProvider from "./providers/walletProvider";
