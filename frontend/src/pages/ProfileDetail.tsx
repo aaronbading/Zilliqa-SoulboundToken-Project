@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Table from "../components/Table/Table";
 import TableCell from "../components/Table/TableCell";
 import { useZilliqa } from "../providers/ZilliqaProvider";
-import { Profile } from "../types";
+import { Profile } from "../types/types";
 
 const ProfileDetail = () => {
   const { address } = useParams();

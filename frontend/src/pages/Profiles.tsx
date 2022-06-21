@@ -4,7 +4,7 @@ import Table from "../components/Table/Table";
 import TableCell from "../components/Table/TableCell";
 import TableHead from "../components/Table/TableHead";
 import { useZilliqa } from "../providers/ZilliqaProvider";
-import { Profile } from "../types";
+import { Profile } from "../types/types";
 
 export default function Profiles() {
   const { zilliqa } = useZilliqa();
