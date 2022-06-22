@@ -1,6 +1,6 @@
 import { BsWallet } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
-import { useWallet } from "../providers/WalletProvider";
+import { useWallet } from "../providers/fuckingHell";
 import Button from "./Button";
 import { useMemo } from "react";
 import cn from "classnames";

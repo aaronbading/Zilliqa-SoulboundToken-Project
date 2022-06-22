@@ -5,7 +5,7 @@ import Landing from "./pages/Landing";
 import CreateProfile from "./pages/CreateProfile";
 import ProfileDetail from "./pages/ProfileDetail";
 import Profiles from "./pages/Profiles";
-import WalletProvider from "./providers/WalletProvider";
+import WalletProvider from "./providers/fuckingHell";
 import ZilliqaProvider from "./providers/ZilliqaProvider";
 import PinataProvider from "./providers/PinataProvider";
 
