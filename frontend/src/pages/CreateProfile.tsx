@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { AiOutlineBlock } from "react-icons/ai";
 import Button from "../components/Button";
 import { usePinata } from "../providers/PinataProvider";
-import { useWallet } from "../providers/fuckingHell";
+import { useWallet } from "../providers/WalletProvider";
 
 const FormField = ({
   id,
