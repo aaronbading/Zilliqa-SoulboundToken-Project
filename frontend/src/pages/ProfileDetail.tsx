@@ -16,15 +16,19 @@ const ProfileDetail = () => {
         .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
         .getState();
 
-      const data = await fetch(states.token_uris[address][1]).then((res) =>
-        res.json()
-      );
-      setProfile({
-        address,
-        profile_uri: states.token_uris[address][0],
-        data_uri: states.token_uris[address][1],
-        data,
-      });
+      try {
+        const data = await fetch(states.token_uris[address][1]).then((res) =>
+          res.json()
+        );
+        setProfile({
+          address,
+          profile_uri: states.token_uris[address][0],
+          data_uri: states.token_uris[address][1],
+          data,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, [address, zilliqa.contracts]);
 
@@ -35,6 +39,7 @@ const ProfileDetail = () => {
   useEffect(() => {
     console.log(profile);
   }, [profile]);
+
   if (!profile) return <div>Loading...</div>;
 
   return (
@@ -67,7 +72,7 @@ const ProfileDetail = () => {
           </Table>
           <h2 className="border-b font-bold tracking-wide mt-8">Attributes</h2>
           <Table>
-            {profile.data?.attributes.map(({ trait_type, value }: any) => (
+            {profile.data?.attributes?.map(({ trait_type, value }: any) => (
               <tr key={trait_type}>
                 <TableCell isIndex={true}>{trait_type}</TableCell>
                 <TableCell>{value}</TableCell>

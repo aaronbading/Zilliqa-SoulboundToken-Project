@@ -28,7 +28,7 @@ const VERSION = bytes.pack(CHAIN_ID, MSG_VERSION);
 const GAS_LIMIT = Long.fromNumber(100000);
 const GAS_PRICE = units.toQa("2000", units.Units.Li);
 
-const TX_PARAMS = {
+export const TX_PARAMS = {
   version: VERSION,
   amount: new BN(0),
   gasPrice: GAS_PRICE,
