@@ -4,8 +4,11 @@ import { useWallet } from "../providers/WalletProvider";
 import Button from "./Button";
 import { useMemo } from "react";
 import cn from "classnames";
+import { useColorMode } from "../providers/ColormodeProvider";
 
 function Navbar() {
+  // USE HOOK: "Functions that has states"
+  const { toggleTheme } = useColorMode();
   const { wallet, connect, disconnect } = useWallet();
 
   const shortenAddress = (address: String) => {
@@ -35,19 +38,27 @@ function Navbar() {
       <a href="/">
         <h1 className={cn("text-white", "font-bold", "text-2xl")}>ZILSBT</h1>
       </a>
-      {wallet ? (
-        <div className={cn("flex", "items-center", "gap-4")}>
-          <h1 className={cn("lowercase", "text-white")}>{walletAddress}</h1>
 
-          <Button onClick={() => disconnect()}>
-            <AiOutlineLogout />
-          </Button>
-        </div>
-      ) : (
-        <Button onClick={() => connect()}>
-          <BsWallet /> Connect
+      <div className="flex">
+        {/* Here ADD A BUTTON TO TOGGGLE THEME */}
+        <Button onClick={() => toggleTheme()} className="mr-2">
+          BUTTON
         </Button>
-      )}
+
+        {wallet ? (
+          <div className={cn("flex", "items-center", "gap-4")}>
+            <h1 className={cn("lowercase", "text-white")}>{walletAddress}</h1>
+
+            <Button onClick={() => disconnect()}>
+              <AiOutlineLogout />
+            </Button>
+          </div>
+        ) : (
+          <Button onClick={() => connect()}>
+            <BsWallet /> Connect
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,10 +1,9 @@
 import cn from "classnames";
+import { Link as RouterLink, LinkProps } from "react-router-dom";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
-
-const Button = ({ children, className, ...props }: ButtonProps) => {
+const Link = ({ children, ...props }: LinkProps) => {
   return (
-    <button
+    <RouterLink
       className={cn(
         "flex",
         "items-center",
@@ -29,14 +28,13 @@ const Button = ({ children, className, ...props }: ButtonProps) => {
         "active:shadow-lg",
         "transition",
         "duration-150",
-        "ease-in-out",
-        className
+        "ease-in-out"
       )}
       {...props}
     >
       {children}
-    </button>
+    </RouterLink>
   );
 };
 
-export default Button;
+export default Link;

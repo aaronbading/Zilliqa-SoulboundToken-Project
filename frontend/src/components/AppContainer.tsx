@@ -4,7 +4,7 @@ import cn from "classnames";
 
 export default function AppContainer() {
   return (
-    <div>
+    <div className="">
       <Navbar />
       <div className={cn("p-6")}>
         <Outlet />

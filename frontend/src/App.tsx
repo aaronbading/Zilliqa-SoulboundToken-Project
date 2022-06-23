@@ -8,21 +8,24 @@ import Profiles from "./pages/Profiles";
 import WalletProvider from "./providers/WalletProvider";
 import ZilliqaProvider from "./providers/ZilliqaProvider";
 import PinataProvider from "./providers/PinataProvider";
+import ColorModeProvider from "./providers/ColormodeProvider";
 
 const App = () => {
   return (
     <WalletProvider>
       <ZilliqaProvider>
         <PinataProvider>
-          <Routes>
-            <Route element={<AppContainer />}>
-              <Route path="/" element={<Landing />} />
-              <Route path="/create-profile" element={<CreateProfile />} />
-              <Route path="/profiles" element={<Profiles />} />
-              <Route path="/profiles/:address" element={<ProfileDetail />} />
-              <Route path="/dummy" element={<Dummy />} />
-            </Route>
-          </Routes>
+          <ColorModeProvider>
+            <Routes>
+              <Route element={<AppContainer />}>
+                <Route path="/" element={<Landing />} />
+                <Route path="/create-profile" element={<CreateProfile />} />
+                <Route path="/profiles" element={<Profiles />} />
+                <Route path="/profiles/:address" element={<ProfileDetail />} />
+                <Route path="/dummy" element={<Dummy />} />
+              </Route>
+            </Routes>
+          </ColorModeProvider>
         </PinataProvider>
       </ZilliqaProvider>
     </WalletProvider>
