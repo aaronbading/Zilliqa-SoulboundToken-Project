@@ -2,6 +2,8 @@ import { BsWallet } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useWallet } from "../providers/WalletProvider";
 import Button from "./Button";
+import Switch from "./Switch";
+
 import { useMemo } from "react";
 import cn from "classnames";
 import { useColorMode } from "../providers/ColormodeProvider";
@@ -41,10 +43,12 @@ function Navbar() {
 
       <div className="flex">
         {/* Here ADD A BUTTON TO TOGGGLE THEME */}
-        <Button onClick={() => toggleTheme()} className="mr-2">
-          BUTTON
-        </Button>
+        <div className="flex mr-3 mt-3" ><Switch />
+        </div>
+        
+      
 
+        
         {wallet ? (
           <div className={cn("flex", "items-center", "gap-4")}>
             <h1 className={cn("lowercase", "text-white")}>{walletAddress}</h1>
