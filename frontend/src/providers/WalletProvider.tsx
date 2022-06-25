@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Contracts } from "@zilliqa-js/contract";
+import { Transaction } from '@zilliqa-js/account';
 import { CallParams, Value } from "../types/zilliqa";
 import { TX_PARAMS } from "./ZilliqaProvider";
 
@@ -23,10 +24,19 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const walletProvider = createContext({});
+interface WalletProviderValue {
+  // update this
+  wallet: any;
+  connect: () => void;
+  disconnect: () => void;
+  callContract: (transition: string, args: Value[], params?: CallParams) => Promise<Transaction>
+}
+
+const walletProvider = createContext<WalletProviderValue>(null as any);
 
 function WalletProvider({ children }: Props) {
   const [wallet, setWallet] = useState<any>();
+  // another state zilpay installed or not
 
   const zilPay = window.zilPay;
 
@@ -49,7 +59,9 @@ function WalletProvider({ children }: Props) {
       await zilPay.wallet.connect();
       setWallet(zilPay.wallet);
     } else {
-      alert("Install ZillPay Wallet");
+      // set a state notinstalled
+      alert("Install ZillPay Wallet"); //TODO: Show a react dialouge, tell users to install zilpay wallet
+
     }
   }, [zilPay]);
 
@@ -61,7 +73,9 @@ function WalletProvider({ children }: Props) {
   }, [zilPay]);
 
   const value = useMemo(() => {
-    return { wallet, connect, disconnect, callContract };
+    return { wallet, connect, disconnect, callContract, 
+      // return the newly created state
+    };
   }, [wallet, connect, disconnect, callContract]);
 
   return (
@@ -71,4 +85,4 @@ function WalletProvider({ children }: Props) {
 
 export default WalletProvider;
 
-export const useWallet = (): any => useContext(walletProvider);
+export const useWallet = () => useContext(walletProvider);
