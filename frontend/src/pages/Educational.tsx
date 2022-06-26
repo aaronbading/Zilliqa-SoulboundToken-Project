@@ -15,7 +15,10 @@ const Educational = () => {
             </div>
             <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight  sm:text-4xl md:mx-auto">
               <span className="relative inline-block">
-                <Dots />
+                <div className="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
+                  <Dots />
+                </div>
+
                 <span className="relative"> </span>
               </span>
               Deploy a SmartContract and earn an achievement for your Soul-Bound

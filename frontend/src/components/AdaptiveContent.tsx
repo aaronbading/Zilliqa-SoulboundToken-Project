@@ -16,7 +16,10 @@ const AdaptiveContent: React.FC<AdaptiveContentProps> = ({
         className="block p-8 bg-gray-900 border border-gray-800 shadow-xl rounded-xl"
         href="/"
       >
-        <HatIcon />
+        <div className="w-10 h-10 text-blue-400">
+          <HatIcon />
+        </div>
+
         <div>
           {subtitle === "" ? null : (
             <h3 className="mt-3 text-xl font-bold text-white">{subtitle}</h3>
