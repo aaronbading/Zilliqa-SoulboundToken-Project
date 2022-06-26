@@ -1,9 +1,10 @@
-import logo from "../img/ZSBT-logos.jpeg";
+import logo from "../../public/img/ZSBT-logos.jpeg";
+
 import Link from "../components/Link";
 import AdaptiveContent from "../components/AdaptiveContent";
-import { useState } from "react";
+import { AdaptiveContentProps } from "../types/types";
 
-const content = [
+const content: AdaptiveContentProps[] = [
   {
     title: " What is an SBT ?",
     subtitle: "Non-transferrable On-Chain Identity",

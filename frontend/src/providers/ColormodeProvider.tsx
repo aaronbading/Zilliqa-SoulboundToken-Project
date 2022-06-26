@@ -1,9 +1,9 @@
 import {
   createContext,
   useContext,
-  // useEffect,
+  useEffect,
   useMemo,
-  // useState,
+  useState,
   ReactNode,
   useCallback,
 } from "react";
@@ -15,28 +15,19 @@ interface ColorModeContextValue {
 const ColorModeContext = createContext<ColorModeContextValue>(null as any);
 
 const ColorModeProvider = ({ children }: { children: ReactNode }) => {
-  // const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState("light");
 
   const toggleTheme = useCallback(() => {
-    // method 1
-    // setMode((prev) => (prev === "light" ? "dark" : "light"));
+    setMode((prev) => (prev === "light" ? "dark" : "light"));
+  }, []);
 
-    // method 2
-    if (!document.documentElement.classList.contains("dark")) {
+  useEffect(() => {
+    if (mode === "light") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, []);
-
-  // useEffect(() => {
-  //  method 1
-  //  if (mode === "light") {
-  //    document.documentElement.classList.add("dark");
-  //  } else {
-  //    document.documentElement.classList.remove("dark");
-  //  }
-  // }, [mode]);
+  }, [mode]);
 
   const value = useMemo(() => {
     return {
