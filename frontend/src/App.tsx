@@ -3,32 +3,40 @@ import AppContainer from "./components/AppContainer";
 import Dummy from "./pages/Dummy";
 import Landing from "./pages/Landing";
 import Educational from "./pages/Educational";
-import CreateProfile from "./pages/CreateProfile";
+// import CreateProfile from "./pages/CreateProfile";
+import CreateProfile from "./pages/CreateProfile_2";
+
 import ProfileDetail from "./pages/ProfileDetail";
 import Profiles from "./pages/Profiles";
 import WalletProvider from "./providers/WalletProvider";
 import ZilliqaProvider from "./providers/ZilliqaProvider";
 import PinataProvider from "./providers/PinataProvider";
 import ColorModeProvider from "./providers/ColormodeProvider";
+import Web3StorageProvider from "./providers/Web3StorageProvider";
 
 const App = () => {
   return (
     <WalletProvider>
       <ZilliqaProvider>
-        <PinataProvider>
-          <ColorModeProvider>
-            <Routes>
-              <Route element={<AppContainer />}>
-                <Route path="/" element={<Landing />} />
-                <Route path="/create-profile" element={<CreateProfile />} />
-                <Route path="/profiles" element={<Profiles />} />
-                <Route path="/profiles/:address" element={<ProfileDetail />} />
-                <Route path="/dummy" element={<Dummy />} />
-                <Route path="/educational" element={<Educational />} />
-              </Route>
-            </Routes>
-          </ColorModeProvider>
-        </PinataProvider>
+        <Web3StorageProvider>
+          <PinataProvider>
+            <ColorModeProvider>
+              <Routes>
+                <Route element={<AppContainer />}>
+                  <Route path="/" element={<Landing />} />
+                  <Route path="/create-profile" element={<CreateProfile />} />
+                  <Route path="/profiles" element={<Profiles />} />
+                  <Route
+                    path="/profiles/:address"
+                    element={<ProfileDetail />}
+                  />
+                  <Route path="/dummy" element={<Dummy />} />
+                  <Route path="/educational" element={<Educational />} />
+                </Route>
+              </Routes>
+            </ColorModeProvider>
+          </PinataProvider>
+        </Web3StorageProvider>
       </ZilliqaProvider>
     </WalletProvider>
   );
