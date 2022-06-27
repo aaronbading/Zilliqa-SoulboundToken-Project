@@ -1,5 +1,4 @@
-
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { BsWallet } from "react-icons/bs";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useWallet } from "../providers/WalletProvider";
@@ -8,8 +7,6 @@ import Switch from "./Switch";
 import { useMemo } from "react";
 import cn from "classnames";
 import { useColorMode } from "../providers/ColormodeProvider";
-import { Link } from 'react-router-dom';
-
 
 function Navbar() {
   // USE HOOK: "Functions that has states"
@@ -30,21 +27,21 @@ function Navbar() {
   return (
     <div
       className={cn(
-        'container',
-        'items-center',
-        'py-8',
-        'px-4',
-        'mx-auto',
-        'flex',
-        'justify-between',
+        "container",
+        "items-center",
+        "py-8",
+        "px-4",
+        "mx-auto",
+        "flex",
+        "justify-between"
       )}
     >
       <a href="/">
-        <h1 className={cn('text-white', 'font-bold', 'pt-2', 'text-2xl')}>
+        <h1 className={cn("text-white", "font-bold", "pt-2", "text-2xl")}>
           <b>
-            {' '}
+            {" "}
             <i>ZILSBT</i>
-          </b>{' '}
+          </b>{" "}
           <svg
             width="38"
             height="38"
@@ -69,6 +66,9 @@ function Navbar() {
       </a>
 
       <div className="flex items-center space-x-4">
+        <div className="flex m-3">
+          <Switch onClick={() => toggleTheme()} />
+        </div>
         <Link className="nav-link" to="profiles">
           Profiles
         </Link>
@@ -76,11 +76,10 @@ function Navbar() {
           Educate
         </Link>
         {wallet ? (
-          <div className={cn('flex', 'items-center', 'gap-4')}>
-            <h1 className={cn('lowercase', 'text-white')}>{walletAddress}</h1>
+          <div className={cn("flex", "items-center", "gap-4")}>
+            <h1 className={cn("lowercase", "text-white")}>{walletAddress}</h1>
 
             <Button className="button-primary" onClick={() => disconnect()}>
-
               <AiOutlineLogout />
             </Button>
           </div>
@@ -88,7 +87,6 @@ function Navbar() {
           <a className="btn-primary" onClick={() => connect()}>
             Connect <BsWallet className="inline-block" />
           </a>
-
         )}
       </div>
     </div>
