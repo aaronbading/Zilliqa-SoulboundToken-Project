@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;500;700;800&display=swap');
 /* General styles */
 body {
@@ -8,6 +9,7 @@ body {
   color: white;
   font-family: 'Inter', sans-serif;
   font-size: 18px;
+  @apply dark:bg-black dark:text-white;
 }
 h1 {
   font-size: 3.5rem;
@@ -119,4 +121,6 @@ h2 {
   .social-bar > * {
     margin-bottom: 0.1rem;
   }
-}
+
+
+

@@ -4,3 +4,9 @@ export type Profile = {
   data_uri: string;
   data?: any;
 };
+
+export type AdaptiveContentProps = {
+  title: string;
+  subtitle: string;
+  content: string;
+};

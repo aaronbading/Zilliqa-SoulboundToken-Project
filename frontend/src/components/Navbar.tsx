@@ -1,13 +1,20 @@
-import { BsWallet } from 'react-icons/bs';
-import { AiOutlineLogout } from 'react-icons/ai';
-import { useWallet } from '../providers/WalletProvider';
-import Button from './Button';
-import { useMemo } from 'react';
-import cn from 'classnames';
+
+import { Link } from 'react-router-dom';
+import { BsWallet } from "react-icons/bs";
+import { AiOutlineLogout } from "react-icons/ai";
+import { useWallet } from "../providers/WalletProvider";
+import Button from "./Button";
+import Switch from "./Switch";
+import { useMemo } from "react";
+import cn from "classnames";
+import { useColorMode } from "../providers/ColormodeProvider";
 import { Link } from 'react-router-dom';
 
+
 function Navbar() {
+  // USE HOOK: "Functions that has states"
   const { wallet, connect, disconnect } = useWallet();
+  const { toggleTheme } = useColorMode();
 
   const shortenAddress = (address: String) => {
     const shortAddress = `${address.slice(0, 4)}...${address.slice(-3)}`;
@@ -60,6 +67,7 @@ function Navbar() {
           </svg>
         </h1>
       </a>
+
       <div className="flex items-center space-x-4">
         <Link className="nav-link" to="profiles">
           Profiles
@@ -72,6 +80,7 @@ function Navbar() {
             <h1 className={cn('lowercase', 'text-white')}>{walletAddress}</h1>
 
             <Button className="button-primary" onClick={() => disconnect()}>
+
               <AiOutlineLogout />
             </Button>
           </div>
@@ -79,6 +88,7 @@ function Navbar() {
           <a className="btn-primary" onClick={() => connect()}>
             Connect <BsWallet className="inline-block" />
           </a>
+
         )}
       </div>
     </div>
