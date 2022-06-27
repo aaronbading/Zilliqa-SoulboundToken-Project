@@ -8,6 +8,7 @@ import Profiles from "./pages/Profiles";
 import WalletProvider from "./providers/WalletProvider";
 import ZilliqaProvider from "./providers/ZilliqaProvider";
 import PinataProvider from "./providers/PinataProvider";
+import WalletModal from "./components/WalletModal";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
               <Route path="/profiles/:address" element={<ProfileDetail />} />
               <Route path="/dummy" element={<Dummy />} />
             </Route>
+            <WalletModal />
           </Routes>
         </PinataProvider>
       </ZilliqaProvider>
