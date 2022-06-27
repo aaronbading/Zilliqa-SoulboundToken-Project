@@ -1,12 +1,12 @@
-import cn from 'classnames';
-import { profile } from 'console';
-import { request } from 'https';
-import { useCallback, useEffect, useState } from 'react';
-import Table from '../components/Table/Table';
-import TableCell from '../components/Table/TableCell';
-import TableHead from '../components/Table/TableHead';
-import { useZilliqa } from '../providers/ZilliqaProvider';
-import { Profile } from '../types/types';
+// import cn from 'classnames';
+// import { profile } from 'console';
+// import { request } from 'https';
+import { useCallback, useEffect, useState } from "react";
+// import Table from '../components/Table/Table';
+// import TableCell from '../components/Table/TableCell';
+// import TableHead from '../components/Table/TableHead';
+import { useZilliqa } from "../providers/ZilliqaProvider";
+import { Profile } from "../types/types";
 
 export default function Profiles() {
   const { zilliqa } = useZilliqa();
@@ -14,7 +14,7 @@ export default function Profiles() {
 
   const getZBTStates = useCallback(async () => {
     const states = await zilliqa.contracts
-      .at('0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b')
+      .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
       .getState();
 
     const _profiles = [];
@@ -58,7 +58,7 @@ export default function Profiles() {
           <div className="card">
             <a href={`/profiles/${address}`}>
               <div className="card-image">
-                <img src={profile_uri} title="Woman holding a mug"></img>
+                <img src={profile_uri} title="Woman holding a mug" alt=""></img>
               </div>
               <div className="px-5 py-2">
                 <div className="mb-4">
@@ -71,7 +71,7 @@ export default function Profiles() {
                     />
                     <p className="text-md text-gray-200 flex items-center">
                       {String(address).substring(0, 6) +
-                        '...' +
+                        "..." +
                         String(address).substring(38)}
                     </p>
                   </div>
@@ -139,7 +139,7 @@ export default function Profiles() {
                     <p className="text-lg text-white flex items-center">0.18</p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/${address}`}
-                      className="ml-auto mr-2 w-5 pl-4 mr-6"
+                      className="ml-auto w-5 pl-4 mr-6"
                     >
                       <svg
                         width="24"
