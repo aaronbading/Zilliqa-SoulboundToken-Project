@@ -9,11 +9,12 @@ module.exports = {
       // Work around for Buffer is undefined:
       // https://github.com/webpack/changelog-v5/issues/10
       new webpack.ProvidePlugin({
+        process: "process/browser",
         Buffer: ["buffer", "Buffer"],
       }),
-      new webpack.ProvidePlugin({
-        process: "process/browser",
-      }),
+      // new webpack.ProvidePlugin({
+      //   process: "process/browser",
+      // }),
       new NodePolyfillPlugin(),
     ];
     // TODO: use other ways to resolve error
@@ -27,6 +28,15 @@ module.exports = {
       fs: false,
     };
 
+    config.module.rules = [
+      {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      ...config.module.rules,
+    ];
     return config;
   },
 };
