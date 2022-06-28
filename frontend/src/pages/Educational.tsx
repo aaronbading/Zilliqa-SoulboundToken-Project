@@ -1,57 +1,59 @@
-import image from "../../public/img/Educational.jpg";
-import { ReactComponent as Dots } from "../assets/dots.svg";
-import { ReactComponent as SciencePerson } from "../assets/dots.svg";
+import logo from "../../public/img/ZSBT-logos.jpeg";
 
-const Educational = () => {
+import Link from "../components/Link";
+import AdaptiveContent from "../components/AdaptiveContent";
+import { AdaptiveContentProps } from "../types/types";
+
+const content: AdaptiveContentProps[] = [
+  {
+    title: "Neo Savant IDE",
+    subtitle: "Setting up the Neo Savant IDE",
+    content:
+      "Head to Neo Savant IDE. Create another account on your ZilPay. Request testnet $ZIL from faucet. Switch to testnet on your IDE.",
+  },
+  {
+    title: "Scilla Language",
+    subtitle: "Writing your smart contract",
+    content:
+      "Create a new file by clicking the file icon on the upper left corner. Refer to the smart contracts in our github repository.(Zilliqa-Soulbound-Project/contract/example/proxy.scilla) modify it such that you can call the transition Earn_achievement in SBT_profile.",
+  },
+  {
+    title: "Achievement Unlocked!",
+    subtitle: "Deploying the smart contract and earnign the achievement",
+    content:
+      "After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile",
+  },
+];
+
+export default function Landing() {
   return (
     <div className="text-gray-700 dark:text-white body-font">
-      <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-        <div className="mx-auto sm:text-center lg:max-w-2xl">
-          <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
-            <div>
-              <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
-                Earn an SBT Achievement
-              </p>
-            </div>
-            <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight  sm:text-4xl md:mx-auto">
-              <span className="relative inline-block">
-                <div className="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
-                  <Dots />
-                </div>
+      <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+        <div className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
+          <h1 className="title-font sm:text-5xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">
+            Deploy a smart contract and earn your achievement!
+          </h1>
 
-                <span className="relative"> </span>
-              </span>
-              Deploy a SmartContract and earn an achievement for your Soul-Bound
-              Token.
-            </h2>
-            <p className="text-base  md:text-lg">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque rem aperiam, eaque ipsa quae.
-            </p>
-          </div>
-          <div className="mb-4 transition-shadow duration-300 hover:shadow-xl lg:mb-6">
-            <img
-              className="object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96"
-              src={image}
-              alt="Inspirational"
+          {content.map((items) => (
+            <AdaptiveContent
+              title={items.title}
+              subtitle={items.subtitle}
+              content={items.content}
             />
+          ))}
+
+          <div className="flex justify-center mt-3">
+            <Link to="/create-profile">Minting Page</Link>
           </div>
-          <p className="max-w-xl mb-4 text-base sm:mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud ullamco laboris aliquip ex ea.
-          </p>
-          <a
-            href="/"
-            aria-label=""
-            className="inline-flex items-center font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800"
-          >
-            <SciencePerson />
-          </a>
+        </div>
+        <div className=" rounded lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
+          <img
+            alt="logo"
+            src={logo}
+            className="object-cover object-center rounded"
+          />
         </div>
       </div>
     </div>
   );
-};
-
-export default Educational;
+}

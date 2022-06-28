@@ -23,10 +23,13 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const walletProvider = createContext({});
+let CONTRACT_ADDRESS: any = process.env.REACT_APP_CONTRACT_ADDRESS;
+const walletProvider = createContext<any>(null as any);
 
 function WalletProvider({ children }: Props) {
   const [wallet, setWallet] = useState<any>();
+  const [notInstalled, setNotInstalled] = useState<boolean>(false);
+  // another state zilpay installed or not
 
   const zilPay = window.zilPay;
 
@@ -62,7 +65,11 @@ function WalletProvider({ children }: Props) {
       await zilPay.wallet.connect();
       setWallet(zilPay.wallet);
     } else {
-      alert("Install ZillPay Wallet");
+      // set a state notinstalled
+      setNotInstalled(true);
+
+      document.getElementById("walletModal")?.classList.toggle("opacity-0");
+      document.getElementById("walletModal")?.classList.toggle("mt-[-100vh]");
     }
   }, [zilPay]);
 
@@ -74,8 +81,15 @@ function WalletProvider({ children }: Props) {
   }, [zilPay]);
 
   const value = useMemo(() => {
-    return { wallet, connect, disconnect, callContract };
-  }, [wallet, connect, disconnect, callContract]);
+    return {
+      wallet,
+      notInstalled,
+      connect,
+      disconnect,
+      callContract,
+      // return the newly created state
+    };
+  }, [wallet, notInstalled, connect, disconnect, callContract]);
 
   return (
     <walletProvider.Provider value={value}>{children}</walletProvider.Provider>
@@ -84,4 +98,4 @@ function WalletProvider({ children }: Props) {
 
 export default WalletProvider;
 
-export const useWallet = (): any => useContext(walletProvider);
+export const useWallet = () => useContext(walletProvider);

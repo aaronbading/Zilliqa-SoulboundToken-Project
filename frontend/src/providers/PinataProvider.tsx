@@ -5,15 +5,16 @@ import {
   useMemo,
   useState,
   ReactNode,
-} from "react";
-import pinataSDK, { PinataClient } from "@pinata/sdk";
+} from 'react';
+import pinataSDK, { PinataClient } from '@pinata/sdk';
 
 interface PinataContextValue {
   pinata: PinataClient;
 }
-
-const PINATA_API_KEY = process.env.REACT_APP_PINATA_API_KEY;
-const PINATA_SECRET_API_KEY = process.env.REACT_APP_PINATA_SECRET_API_KEY;
+// REACT_APP_PINATA_API_KEY=9b90184f65804f9e8476
+// REACT_APP_PINATA_SECRET_API_KEY=1940a9049e28bd46334db0fdaf3b25b125d5306cc407cfa5001eb2df5db4b91e
+const PINATA_API_KEY = '9b90184f65804f9e8476';
+const PINATA_SECRET_API_KEY = '1940a9049e28bd46334db0fdaf3b25b125d5306cc407cfa5001eb2df5db4b91es'
 
 const PinataContext = createContext<PinataContextValue>(null as any);
 
@@ -28,7 +29,7 @@ const PinataProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!PINATA_API_KEY || !PINATA_SECRET_API_KEY) {
-      throw new Error("Pinata API keys not provided!");
+      throw new Error('Pinata API keys not provided!');
     }
     const pinata = pinataSDK(PINATA_API_KEY, PINATA_SECRET_API_KEY);
     setPinataClient(pinata);
