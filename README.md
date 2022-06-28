@@ -33,23 +33,23 @@ Live Website: https://zilsbt.netlify.app/
 
 ### Ivan
 Email: ivan.ng.chak.ming@gmail.com
-Github: @ivan-ngchakming
+Github: @ivan-ngchakming https://github.com/ivan-ngchakming
 
 ### Aaron
 Email:
-Github: @aaronbading
+Github: @aaronbading https://github.com/aaronbading
 
 ### Wayne
 Email: devchain7890@gmail.com 
-Github: @hougangdev
+Github: @hougangdev https://github.com/hougangdev
 
 ### Mumeen
 Email:
-Github: @mum33n
+Github: @mum33n https://github.com/mum33n
 
 ### Yosh
 Email: 
-Github: @imyosh
+Github: @imyosh https://github.com/imyosh
 
 ### John
 Email:
