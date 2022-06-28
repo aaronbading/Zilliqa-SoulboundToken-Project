@@ -25,7 +25,7 @@ const content: AdaptiveContentProps[] = [
   },
 ];
 
-export default function Landing() {
+export default function Educational() {
   return (
     <div className="text-gray-700 dark:text-white body-font">
       <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
@@ -43,7 +43,7 @@ export default function Landing() {
           ))}
 
           <div className="flex justify-center mt-3">
-            <Link to="/create-profile">Minting Page</Link>
+            <Link to="/profiles">View Profiles</Link>
           </div>
         </div>
         <div className=" rounded lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
