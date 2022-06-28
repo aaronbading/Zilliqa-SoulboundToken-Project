@@ -32,24 +32,24 @@ $ npm start
 ## Team
 
 ### Ivan
-Email:
-Github:
+Email: ivan.ng.chak.ming@gmail.com
+Github: @ivan-ngchakming
 
 ### Aaron
 Email:
-Github:
+Github: @aaronbading
 
 ### Wayne
-Email:
-Github:
+Email: devchain7890@gmail.com 
+Github: @hougangdev
 
 ### Mumeen
 Email:
-Github:
+Github: @mum33n
 
 ### Yosh
-Email:
-Github:
+Email: 
+Github: @imyosh
 
 ### John
 Email:
