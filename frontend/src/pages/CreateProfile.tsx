@@ -1,14 +1,6 @@
-import { useStorage } from "../providers/Web3StorageProvider";
 import DropArea from "../components/DropArea";
-import { useState } from "react";
 
 const CreateProfile = () => {
-  const [file, setFile] = useState<File | null>(null);
-
-  function fileChange(newFile: File) {
-    setFile(newFile);
-  }
-
   return (
     <div>
       <title>Upload File</title>
@@ -19,7 +11,7 @@ const CreateProfile = () => {
           <p>SOME CONTENT</p>
         </div>
       </div>
-      <h1>Upload File to Web3.Storage</h1>
+
       <DropArea />
     </div>
   );

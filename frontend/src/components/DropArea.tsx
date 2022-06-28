@@ -71,17 +71,16 @@ const DropArea = () => {
     // Router.push(`/result?url=${imageURI}`);
   };
   const onSubmit = handleSubmit(async ({ walletAddress, ...data }) => {
+    //TODO : input validation before creating links
+
     const imageURI = await storeFiles(file);
-    console.log(imageURI);
 
     //TODO , Add additional information such as social media handles.
     const jsonString = JSON.stringify({
       name: `${data.name}`,
       id: `${data.description}`,
     });
-
     const nameUri = await storeJson(jsonString);
-    console.log(nameUri);
 
     const tx = await callContract(
       "Mint",
@@ -93,10 +92,8 @@ const DropArea = () => {
     );
 
     // TODO: Check for transaction conformation
-    console.log("transaction: %o", tx.id);
-
-    console.log(JSON.stringify(tx.receipt, null, 4));
-
+    // console.log("transaction: %o", tx.id);
+    // console.log(JSON.stringify(tx.receipt, null, 4));
     console.log(tx.receipt);
   });
 
@@ -179,10 +176,6 @@ const DropArea = () => {
             <div className="md:flex md:items-center">
               <div className="md:w-1/3"></div>
               <div className="md:w-2/3">
-                {/* <Button type="submit">
-                  <AiOutlineBlock className="scale-150" />
-                  Mint
-                </Button> */}
                 <Button
                   type="submit"
                   className={styles.uploadButton}

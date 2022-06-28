@@ -39,23 +39,14 @@ function WalletProvider({ children }: Props) {
         throw new Error("ZilPay client is not initialized");
       }
       // TODO: Move contract address to .env
-      const contract = await zilPay.contracts.at(
-        "0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b"
-      );
+      const contract = await zilPay.contracts.at(CONTRACT_ADDRESS);
 
       const callTx = await contract.call(transition, args, {
         ...TX_PARAMS,
         ...params,
       });
 
-      console.log("transaction recept : %o", callTx.getReceipt);
-      console.log("transaction recept : %o", callTx.isConfirmed());
-      console.log("transaction recept : %o", callTx.isPending());
-
-      const txReceipt = JSON.stringify(callTx, null, 4);
-      console.log(txReceipt);
-
-      return txReceipt;
+      return callTx;
     },
     [zilPay]
   );
