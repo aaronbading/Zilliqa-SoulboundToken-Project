@@ -9,13 +9,13 @@ const content: AdaptiveContentProps[] = [
     title: "Neo Savant IDE",
     subtitle: "Setting up the Neo Savant IDE",
     content:
-      "Head to Neo Savant IDE. Switch network to testnet and create an account.",
+      "Head to Neo Savant IDE. Create another account on your ZilPay. Request testnet $ZIL from faucet. Switch to testnet on your IDE.",
   },
   {
     title: "Scilla Language",
     subtitle: "Writing your smart contract",
     content:
-      "Refer to the smart contracts in our github repository.(Zilliqa-Soulbound-Project/contract/example/proxy.scilla) modify it such that you can call the transition Earn_achievement in SBT_profile.",
+      "Create a new file by clicking the file icon on the upper left corner. Refer to the smart contracts in our github repository.(Zilliqa-Soulbound-Project/contract/example/proxy.scilla) modify it such that you can call the transition Earn_achievement in SBT_profile.",
   },
   {
     title: "Achievement Unlocked!",
