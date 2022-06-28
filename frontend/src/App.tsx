@@ -9,6 +9,9 @@ import Profiles from "./pages/Profiles";
 import WalletProvider from "./providers/WalletProvider";
 import ZilliqaProvider from "./providers/ZilliqaProvider";
 import PinataProvider from "./providers/PinataProvider";
+
+import WalletModal from "./components/WalletModal";
+
 import ColorModeProvider from "./providers/ColormodeProvider";
 
 const App = () => {
@@ -27,6 +30,7 @@ const App = () => {
                 <Route path="/educational" element={<Educational />} />
               </Route>
             </Routes>
+            <WalletModal></WalletModal>
           </ColorModeProvider>
         </PinataProvider>
       </ZilliqaProvider>

@@ -1,6 +1,5 @@
 import cn from "classnames";
 import { useState } from "react";
-import { useColorMode } from "../providers/ColormodeProvider";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
