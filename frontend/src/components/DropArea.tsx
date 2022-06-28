@@ -49,7 +49,7 @@ const DropArea = () => {
   const [data, setData] = useState<ArrayBuffer | string | null | undefined>(
     null
   );
-  const { web3storage, storeFiles, storeJson } = useStorage();
+  const { storeFiles, storeJson } = useStorage();
   const { wallet, callContract } = useWallet();
   const [err, setErr] = useState<string | boolean>(false);
   const [file, setFile] = useState<File | null>(null);
@@ -68,7 +68,6 @@ const DropArea = () => {
   }, [setValue, wallet]);
 
   const uploadImage = async () => {
-    const imageURI = await storeFiles(file);
     // Router.push(`/result?url=${imageURI}`);
   };
   const onSubmit = handleSubmit(async ({ walletAddress, ...data }) => {
@@ -94,7 +93,11 @@ const DropArea = () => {
     );
 
     // TODO: Check for transaction conformation
-    console.log(tx);
+    console.log("transaction: %o", tx.id);
+
+    console.log(JSON.stringify(tx.receipt, null, 4));
+
+    console.log(tx.receipt);
   });
 
   const onDrop = (e: React.DragEvent) => {
@@ -137,7 +140,7 @@ const DropArea = () => {
         className={styles.card}
       >
         {data !== null && (
-          <img className={styles.image} src={data?.toString()} />
+          <img className={styles.image} src={data?.toString()} alt="" />
         )}
         {data === null && (
           <p className={styles.dropAreaText}>Drag and drop image</p>
