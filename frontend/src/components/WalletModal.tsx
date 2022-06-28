@@ -3,7 +3,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import Button from "./Button";
 import cn from "classnames";
 
-function WalletModal() {
+const WalletModal = () => {
   return (
     <div
       className={cn(
@@ -19,7 +19,8 @@ function WalletModal() {
         "items-center",
         "top-0",
         "opacity-0",
-        "left-0"
+        "left-0",
+        'mt-[-100vh]'
       )}
       style={{ display: "" }}
       id="walletModal"
@@ -34,7 +35,7 @@ function WalletModal() {
         </div>
         <div className="flex justify-center">
           <Button>
-            <a href="https://zilpay.io/" target="_blank" rel="noreferrer">
+            <a className="block" href="https://zilpay.io/" target="_blank" rel="noreferrer">
               Download Wallet
             </a>
           </Button>
@@ -43,6 +44,6 @@ function WalletModal() {
       </div>
     </div>
   );
-}
+};
 
 export default WalletModal;

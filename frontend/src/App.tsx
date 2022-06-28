@@ -23,8 +23,8 @@ const App = () => {
               <Route path="/profiles/:address" element={<ProfileDetail />} />
               <Route path="/dummy" element={<Dummy />} />
             </Route>
-            <WalletModal />
           </Routes>
+          <WalletModal></WalletModal>
         </PinataProvider>
       </ZilliqaProvider>
     </WalletProvider>
