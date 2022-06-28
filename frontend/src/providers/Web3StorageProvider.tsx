@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 interface StorageProviderContextValue {
   web3storage: Web3Storage;
   storeFiles: (file: any) => Promise<String | undefined>;
+  storeJson: (file: any) => Promise<String | undefined>;
 }
 const WEB3STORAGE_API_KEY = process.env.REACT_APP_WEB3_STORAGE_API_KEY;
 
@@ -50,12 +51,29 @@ const StorageProvider = ({ children }: { children: ReactNode }) => {
     [web3storageClient]
   );
 
+  const storeJson = useCallback(
+    async (file: any) => {
+      if (web3storageClient) {
+        const ext = "json";
+        const fileName = `${uuidv4()}.${ext}`;
+        const newFile = new File([file], fileName, { type: file.type });
+        const cid = await web3storageClient.put([newFile], {
+          name: fileName,
+        });
+        const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
+        return imageURI;
+      }
+    },
+    [web3storageClient]
+  );
+
   const value = useMemo(() => {
     return {
       web3storage: web3storageClient!,
       storeFiles,
+      storeJson,
     };
-  }, [web3storageClient, storeFiles]);
+  }, [web3storageClient, storeFiles, storeJson]);
 
   return (
     <StorageContext.Provider value={value}>

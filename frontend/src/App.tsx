@@ -4,7 +4,7 @@ import Dummy from "./pages/Dummy";
 import Landing from "./pages/Landing";
 import Educational from "./pages/Educational";
 // import CreateProfile from "./pages/CreateProfile";
-import CreateProfile from "./pages/CreateProfile_2";
+import CreateProfile from "./pages/CreateProfile";
 
 import ProfileDetail from "./pages/ProfileDetail";
 import Profiles from "./pages/Profiles";
