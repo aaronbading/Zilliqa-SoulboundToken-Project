@@ -23,7 +23,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-let CONTRACT_ADDRESS: any = process.env.REACT_APP_CONTRACT_ADDRESS;
+// let CONTRACT_ADDRESS: any = process.env.REACT_APP_CONTRACT_ADDRESS;
 const walletProvider = createContext<any>(null as any);
 
 function WalletProvider({ children }: Props) {
@@ -39,7 +39,7 @@ function WalletProvider({ children }: Props) {
         throw new Error("ZilPay client is not initialized");
       }
       // TODO: Move contract address to .env
-      const contract = await zilPay.contracts.at(CONTRACT_ADDRESS);
+      const contract = await zilPay.contracts.at(0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b);
 
       const callTx = await contract.call(transition, args, {
         ...TX_PARAMS,
