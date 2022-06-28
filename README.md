@@ -28,28 +28,28 @@ $ npm install
 $ npm start
 ```
 ## Demo
-
+Live Website: https://zilsbt.netlify.app/
 ## Team
 
 ### Ivan
-Email:
-Github:
+Email: ivan.ng.chak.ming@gmail.com
+Github: @ivan-ngchakming https://github.com/ivan-ngchakming
 
 ### Aaron
 Email:
-Github:
+Github: @aaronbading https://github.com/aaronbading
 
 ### Wayne
-Email:
-Github:
+Email: devchain7890@gmail.com 
+Github: @hougangdev https://github.com/hougangdev
 
 ### Mumeen
 Email:
-Github:
+Github: @mum33n https://github.com/mum33n
 
 ### Yosh
-Email:
-Github:
+Email: 
+Github: @imyosh https://github.com/imyosh
 
 ### John
 Email:

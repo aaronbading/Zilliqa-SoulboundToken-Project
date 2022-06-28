@@ -6,7 +6,7 @@ export default function AppContainer() {
   return (
     <div>
       <Navbar />
-      <div className={cn("")}>
+      <div className={cn('')}>
         <Outlet />
       </div>
     </div>
