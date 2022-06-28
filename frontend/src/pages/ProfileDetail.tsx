@@ -33,16 +33,13 @@ const ProfileDetail = () => {
       }
     }
   }, [address, zilliqa.contracts]);
-  const copyToClipboard = useCallback(
-    (text: any) => {
-      navigator.clipboard?.writeText(text);
-      setCopied(true);
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000);
-    },
-    [copied]
-  );
+  const copyToClipboard = useCallback((text: any) => {
+    navigator.clipboard?.writeText(text);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     getZBTStates();
