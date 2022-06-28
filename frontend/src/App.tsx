@@ -9,13 +9,29 @@ import Profiles from "./pages/Profiles";
 import WalletProvider from "./providers/WalletProvider";
 import ZilliqaProvider from "./providers/ZilliqaProvider";
 import PinataProvider from "./providers/PinataProvider";
+
+import WalletModal from "./components/WalletModal";
+
 import ColorModeProvider from "./providers/ColormodeProvider";
+
 
 const App = () => {
   return (
     <WalletProvider>
       <ZilliqaProvider>
         <PinataProvider>
+
+          <Routes>
+            <Route element={<AppContainer />}>
+              <Route path="/" element={<Landing />} />
+              <Route path="/create-profile" element={<CreateProfile />} />
+              <Route path="/profiles" element={<Profiles />} />
+              <Route path="/profiles/:address" element={<ProfileDetail />} />
+              <Route path="/dummy" element={<Dummy />} />
+            </Route>
+          </Routes>
+          <WalletModal></WalletModal>
+
           <ColorModeProvider>
             <Routes>
               <Route element={<AppContainer />}>
@@ -27,7 +43,9 @@ const App = () => {
                 <Route path="/educational" element={<Educational />} />
               </Route>
             </Routes>
+            <WalletModal></WalletModal>
           </ColorModeProvider>
+
         </PinataProvider>
       </ZilliqaProvider>
     </WalletProvider>
