@@ -84,9 +84,9 @@ function Navbar() {
             </Button>
           </div>
         ) : (
-          <a className="btn-primary" onClick={() => connect()}>
+          <Button onClick={() => connect()}>
             Connect <BsWallet className="inline-block" />
-          </a>
+          </Button>
         )}
       </div>
     </div>

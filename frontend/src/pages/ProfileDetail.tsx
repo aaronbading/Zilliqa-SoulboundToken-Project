@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineCopy } from "react-icons/ai";
 import { useParams } from "react-router-dom";
-import Button from "../components/Button";
 // import Table from '../components/Table/Table';
 // import TableCell from '../components/Table/TableCell';
 import { useZilliqa } from "../providers/ZilliqaProvider";
@@ -103,12 +102,7 @@ const ProfileDetail = () => {
         alt=""
       />
       <div className="container px-6 mx-auto profile-details">
-        <div className="flex items-baseline justify-between">
-          <img src={profile.data?.image} alt="" className="profile-img" />
-          <div>
-            <Button>Edit profile</Button>
-          </div>
-        </div>
+        <img src={profile.data?.image} alt="" className="profile-img" />
         <div className="flex justify-between">
           <div className="profile-bio">
             <p className="profile-name">@{profile.data?.name}</p>
