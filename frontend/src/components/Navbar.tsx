@@ -72,7 +72,7 @@ function Navbar() {
         <Link className="nav-link" to="profiles">
           Profiles
         </Link>
-        <Link className="nav-link" to="profiles">
+        <Link className="nav-link" to="educational">
           Educate
         </Link>
         {wallet ? (
