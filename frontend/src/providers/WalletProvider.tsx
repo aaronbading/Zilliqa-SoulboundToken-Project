@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { Contracts } from "@zilliqa-js/contract";
-import { Transaction } from "@zilliqa-js/account";
 import { CallParams, Value } from "../types/zilliqa";
 import { TX_PARAMS } from "./ZilliqaProvider";
 
@@ -24,23 +23,12 @@ interface Props {
   children?: React.ReactNode;
 }
 
-interface WalletProviderValue {
-  // update this
-  wallet: any;
-  connect: () => void;
-  disconnect: () => void;
-  callContract: (
-    transition: string,
-    args: Value[],
-    params?: CallParams
-  ) => Promise<Transaction>;
-}
 let CONTRACT_ADDRESS: any = process.env.REACT_APP_CONTRACT_ADDRESS;
-const walletProvider = createContext<WalletProviderValue>(null as any);
+const walletProvider = createContext<any>(null as any);
 
 function WalletProvider({ children }: Props) {
   const [wallet, setWallet] = useState<any>();
-  const [notInstalled, setNotInstalled]=useState<boolean>(false)
+  const [notInstalled, setNotInstalled] = useState<boolean>(false);
   // another state zilpay installed or not
 
   const zilPay = window.zilPay;
@@ -52,7 +40,13 @@ function WalletProvider({ children }: Props) {
       }
       // TODO: Move contract address to .env
       const contract = await zilPay.contracts.at(CONTRACT_ADDRESS);
-      return contract.call(transition, args, { ...TX_PARAMS, ...params });
+
+      const callTx = await contract.call(transition, args, {
+        ...TX_PARAMS,
+        ...params,
+      });
+
+      return callTx;
     },
     [zilPay]
   );
@@ -63,10 +57,10 @@ function WalletProvider({ children }: Props) {
       setWallet(zilPay.wallet);
     } else {
       // set a state notinstalled
-      setNotInstalled(true)
+      setNotInstalled(true);
 
       document.getElementById("walletModal")?.classList.toggle("opacity-0");
-      document.getElementById("walletModal")?.classList.toggle("mt-[-100vh]")
+      document.getElementById("walletModal")?.classList.toggle("mt-[-100vh]");
     }
   }, [zilPay]);
 
@@ -86,7 +80,7 @@ function WalletProvider({ children }: Props) {
       callContract,
       // return the newly created state
     };
-  }, [wallet,notInstalled, connect, disconnect, callContract]);
+  }, [wallet, notInstalled, connect, disconnect, callContract]);
 
   return (
     <walletProvider.Provider value={value}>{children}</walletProvider.Provider>
