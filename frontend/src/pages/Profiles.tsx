@@ -14,7 +14,7 @@ export default function Profiles() {
 
   const getZBTStates = useCallback(async () => {
     const states = await zilliqa.contracts
-      .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
+      .at("0xb019d93b6ad4b8e7339a1042ede50341a77cca0f")
       .getState();
 
     const _profiles = [];
