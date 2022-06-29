@@ -29,6 +29,7 @@ $ npm start
 ```
 ## Demo
 Live Website: https://zilsbt.netlify.app/
+Walkthrough: https://youtu.be/0LDV5Lv7J3M
 ## Team
 
 ### Ivan
