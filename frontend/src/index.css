@@ -96,6 +96,7 @@ h2 {
 }
 .profile-img {
   width: 250px;
+  height: 250px;
   max-width: 250px;
   border-radius: 100%;
   border: 7px solid #ff9900;
@@ -131,12 +132,19 @@ h2 {
   font-size: 3rem;
   line-height: 110%;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 .hero-subtitle {
   font-size: 1rem;
   color: #9ef01a;
   letter-spacing: 2.5px;
+}
+.hero p {
+  color: #e6e6e6;
+  width: 400px;
+}
+.hero p a {
+  text-decoration: underline;
 }
 .cta-primary,
 .cta-secondary {
@@ -188,4 +196,46 @@ h2 {
   .social-proof ul li svg {
     width: 150px;
   }
+}
+
+/* create-profile page */
+.drag-drop {
+  background-color: #424242;
+  border-radius: 4px;
+  margin: 0 auto;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem;
+}
+.drag-drop p {
+  font-size: 1.2rem;
+}
+.drag-drop img {
+  margin-bottom: 0.8rem;
+  width: 100%;
+  border-radius: 4px;
+}
+.form-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  background-color: rgb(140, 0, 0);
+}
+.mint-form {
+  padding: 1.5rem 4rem;
+  margin: 0 auto;
+  background-color: #424242;
+  width: 100%;
+}
+.mint-form form {
+  margin: 0 auto;
+}
+.mint-form form button {
+  margin-left: 0;
+}
+.mint-form form input {
+  width: 155%;
 }

@@ -1,27 +1,28 @@
 // import cn from 'classnames';
 // import { profile } from 'console';
 // import { request } from 'https';
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 // import Table from '../components/Table/Table';
 // import TableCell from '../components/Table/TableCell';
 // import TableHead from '../components/Table/TableHead';
-import { useZilliqa } from "../providers/ZilliqaProvider";
-import { Profile } from "../types/types";
+import { useZilliqa } from '../providers/ZilliqaProvider';
+import { Profile } from '../types/types';
 
 export default function Profiles() {
   const { zilliqa } = useZilliqa();
   const [profiles, setProfiles] = useState<Profile[] | null>(null);
+  const [balance, setBalance] = useState<number>(0);
 
   const getZBTStates = useCallback(async () => {
     const states = await zilliqa.contracts
-      .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
+      .at('0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b')
       .getState();
 
     const _profiles = [];
     for (let address in states.token_uris) {
       try {
         const data = await fetch(states.token_uris[address][1]).then((res) =>
-          res.json()
+          res.json(),
         );
 
         const profile = {
@@ -31,6 +32,11 @@ export default function Profiles() {
           data,
         };
         _profiles.push(profile);
+        // balance
+        const balance = await zilliqa.blockchain.getBalance(profile.address);
+        const result = balance.result.balance;
+        const result_float = result / 1000000000000;
+        setBalance(result_float);
       } catch (err) {
         console.log(err);
       }
@@ -80,7 +86,7 @@ export default function Profiles() {
                     />
                     <p className="text-md text-gray-200 flex items-center">
                       {String(address).substring(0, 6) +
-                        "..." +
+                        '...' +
                         String(address).substring(38)}
                     </p>
                   </div>
@@ -145,7 +151,9 @@ export default function Profiles() {
                       </defs>
                     </svg>
 
-                    <p className="text-lg text-white flex items-center">0.18</p>
+                    <p className="text-lg text-white flex items-center">
+                      {balance}
+                    </p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/${address}`}
                       className="ml-auto w-5 pl-4 mr-6"

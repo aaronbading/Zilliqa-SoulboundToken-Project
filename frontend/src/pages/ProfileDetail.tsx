@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
-import { AiOutlineCopy } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from 'react';
+import { AiOutlineCopy } from 'react-icons/ai';
+import { useParams } from 'react-router-dom';
 // import Table from '../components/Table/Table';
 // import TableCell from '../components/Table/TableCell';
-import { useZilliqa } from "../providers/ZilliqaProvider";
-import { Profile } from "../types/types";
+import { useZilliqa } from '../providers/ZilliqaProvider';
+import { Profile } from '../types/types';
+import { Link } from 'react-router-dom';
 
 const ProfileDetail = () => {
   const { address } = useParams();
@@ -15,7 +16,7 @@ const ProfileDetail = () => {
   const getZBTStates = useCallback(async () => {
     if (address) {
       const states = await zilliqa.contracts
-        .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
+        .at('0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b')
         .getState();
 
       const balance = await zilliqa.blockchain.getBalance(address);
@@ -25,7 +26,7 @@ const ProfileDetail = () => {
 
       try {
         const data = await fetch(states.token_uris[address][1]).then((res) =>
-          res.json()
+          res.json(),
         );
         setProfile({
           address,
@@ -114,7 +115,7 @@ const ProfileDetail = () => {
               />
               <p className="text-md text-gray-200 flex items-center">
                 {String(address).substring(0, 6) +
-                  "..." +
+                  '...' +
                   String(address).substring(38)}
               </p>
               <AiOutlineCopy
@@ -190,6 +191,8 @@ const ProfileDetail = () => {
               </p>
             </div>
           </div>
+          {/* educate button */}
+
           <div className="mt-12 flex sm:space-x-0 md:space-x-3 social-bar">
             {/* social handles */}
 
@@ -252,12 +255,16 @@ const ProfileDetail = () => {
             </a>
           </div>
         </div>
+
         {/* profile-description */}
         <p className="profile-description">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum
           doloremque eveniet possimus exercitationem inventore. Nulla nostrum
           suscipit placeat! Dolor, ut.
         </p>
+        <Link to="/educational" className="cta-secondary my-4">
+          Education
+        </Link>
       </div>
       {copied && (
         <div className="absolute flex justify-center w-full top-5 left-0">
