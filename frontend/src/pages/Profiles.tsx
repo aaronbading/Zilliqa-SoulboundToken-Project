@@ -11,7 +11,6 @@ import { Profile } from "../types/types";
 export default function Profiles() {
   const { zilliqa } = useZilliqa();
   const [profiles, setProfiles] = useState<Profile[] | null>(null);
-  const [balance, setBalance] = useState<number>(0);
 
   const getZBTStates = useCallback(async () => {
     const states = await zilliqa.contracts
@@ -44,7 +43,7 @@ export default function Profiles() {
     }
 
     setProfiles(_profiles);
-  }, [zilliqa.contracts]);
+  }, [zilliqa.contracts, zilliqa.blockchain]);
   // const names = profiles?.map(({ data_uri }) => {
   //   fetch(data_uri)
   //     .then((response) => response.json())

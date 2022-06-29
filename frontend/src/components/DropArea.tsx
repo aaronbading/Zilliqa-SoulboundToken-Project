@@ -9,6 +9,8 @@ import { AiOutlineBlock } from "react-icons/ai";
 import { FcImageFile } from "react-icons/fc";
 import Button from "../components/Button";
 import Loader from "../assets/loader.gif";
+import cn from "classnames";
+import Link from "../components/Link";
 
 const FormField = ({
   id,
@@ -53,6 +55,8 @@ const DropArea = () => {
   const [err, setErr] = useState<string | boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setLoading] = useState<string | boolean>(false);
+  const [isMinted, setMinted] = useState<string | boolean>(false);
+
   const {
     register,
     handleSubmit,
@@ -66,7 +70,7 @@ const DropArea = () => {
     }
   }, [setValue, wallet]);
 
-  const uploadImage = async () => {
+  const uploadImage = () => {
     // Router.push(`/result?url=${imageURI}`);
     setLoading(true);
     setTimeout(() => {
@@ -105,6 +109,7 @@ const DropArea = () => {
       console.log("error");
     }
     uploadImage();
+    setMinted(true);
   });
 
   const onDrop = (e: React.DragEvent) => {
@@ -197,8 +202,28 @@ const DropArea = () => {
                   <AiOutlineBlock className="scale-150" />
                   Mint
                 </Button> */}
-                {isLoading ? (
-                  <img src={Loader} width="50" alt="" />
+
+                {isMinted ? (
+                  isLoading ? (
+                    <div>
+                      <img src={Loader} width="50" alt="" />
+                      <div
+                        className={cn(
+                          "text-white",
+                          "font-bold",
+                          "pt-2",
+                          "text-2xl"
+                        )}
+                      >
+                        Waiting for transaction to reach the network...{"\n"}{" "}
+                        Your Sbt will appear among the others shortly.
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-center mt-3">
+                      <Link to="/profiles">View Profiles</Link>
+                    </div>
+                  )
                 ) : (
                   <Button type="submit" className={styles.uploadButton}>
                     <AiOutlineBlock className="scale-150" />
