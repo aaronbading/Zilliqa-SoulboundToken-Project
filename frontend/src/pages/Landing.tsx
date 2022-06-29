@@ -7,18 +7,21 @@ const content: AdaptiveContentProps[] = [
     subtitle: "On-Chain Identity",
     content:
       "The Zilliqa Soul-Bound Token is intended to be a proof-of-concept utility token that allows users to own their on-chain identity. At its core, it is non-transferable token that users mint for themselves. This has been implemented on the Zilliqa blockchain using the native smart-contract language Scilla.",
+    subcontent: "",
   },
   {
     title: "Purpose of SBT?",
     subtitle: "incentivizing utility to users",
     content:
       "The token’s purpose is to bring utility by incentivizing users to interact with the underlying platform to grow their SBT Profile. An example of user incentivization is earning educational achievements for completing a course or solving a problem. Rewards for participation could theoretically be in the form of NFTs, digital assets or just a simple “kudos” on the Profile Page. This system establishes a sense of reputation and trust in profiles which is essential for thriving online communities.",
+    subcontent: "",
   },
   {
     title: "Our vision?",
     subtitle: "Constant innovation",
     content:
       "The concept of an SBT is rather loosely defined and quite novel. Thus, the vision of project reaches far beyond what has currently implemented. Nevertheless, this project serves as one of many starting points for powerful idea that will enable another layer of incentivization on top of decentralized digital ownership.",
+    subcontent: "",
   },
 ];
 
