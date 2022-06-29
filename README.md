@@ -63,4 +63,4 @@ Github:
 - Scilla, Typescript, Tailwindcss...
 
 ## License
-
+Apache License 2.0
