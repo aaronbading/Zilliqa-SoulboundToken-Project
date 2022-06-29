@@ -52,6 +52,7 @@ const DropArea = () => {
   );
   const { storeFiles, storeJson } = useStorage();
   const { wallet, callContract } = useWallet();
+  // const { callContract } = useZilliqa();
   const [err, setErr] = useState<string | boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setLoading] = useState<string | boolean>(false);

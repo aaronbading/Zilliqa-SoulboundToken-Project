@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineCopy } from "react-icons/ai";
 import { useParams } from "react-router-dom";
-// import Table from '../components/Table/Table';
-// import TableCell from '../components/Table/TableCell';
 import { useZilliqa } from "../providers/ZilliqaProvider";
 import { Profile } from "../types/types";
 import { Link } from "react-router-dom";
+import Button from "../components/Button";
+import { scillaJSONParams } from "@zilliqa-js/scilla-json-utils";
+import { useWallet } from "../providers/WalletProvider";
 
 const ProfileDetail = () => {
   const { address } = useParams();
@@ -13,6 +14,8 @@ const ProfileDetail = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [copied, setCopied] = useState<Boolean>();
   const [description, setDescription] = useState<string>();
+  const { wallet, callContract } = useWallet();
+  const [allowedToBurn, setallowedToBurn] = useState<Boolean>(false);
 
   const getZBTStates = useCallback(async () => {
     if (address) {
@@ -53,9 +56,37 @@ const ProfileDetail = () => {
     }, 2000);
   }, []);
 
+  const Burn = useCallback(async () => {
+    console.log("Burn ");
+    try {
+      const tx = await callContract(
+        "Burn",
+        scillaJSONParams({
+          to: ["ByStr20", profile?.address],
+        })
+      );
+
+      console.log(tx.isPending());
+      console.log(tx.isConfirmed());
+      console.log("YAAAAY");
+    } catch (error) {
+      console.log(error);
+    }
+  }, [callContract, profile?.address]);
+
   useEffect(() => {
     getZBTStates();
-  }, [getZBTStates]);
+
+    if (address) {
+      if (wallet) {
+        if (address === wallet.defaultAccount.base16.toString().toLowerCase()) {
+          setallowedToBurn(true);
+        }
+      } else {
+        setallowedToBurn(false);
+      }
+    }
+  }, [getZBTStates, address, wallet, allowedToBurn]);
 
   if (!profile) return <div>Loading...</div>;
 
@@ -231,6 +262,13 @@ const ProfileDetail = () => {
         <Link to="/educational" className="cta-secondary my-4">
           Earn Achievement
         </Link>
+        {allowedToBurn ? (
+          <Button className="button-primary bg-red-600" onClick={() => Burn()}>
+            Burn Profile
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
       {copied && (
         <div className="absolute flex justify-center w-full top-5 left-0">
