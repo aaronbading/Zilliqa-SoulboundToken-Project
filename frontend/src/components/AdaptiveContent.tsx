@@ -5,6 +5,7 @@ const AdaptiveContent: React.FC<AdaptiveContentProps> = ({
   title,
   subtitle,
   content,
+  subcontent,
 }) => {
   return (
     <section>
@@ -26,6 +27,11 @@ const AdaptiveContent: React.FC<AdaptiveContentProps> = ({
           )}
         </div>
         <p className="mt-4 text-sm text-gray-300">{content}</p>
+        <div>
+          {subcontent === "" ? null : (
+            <p className="mt-4 text-sm text-gray-300">{subcontent}</p>
+          )}
+        </div>
       </a>
     </section>
   );

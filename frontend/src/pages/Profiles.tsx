@@ -18,7 +18,11 @@ export default function Profiles() {
       .getState();
 
     const _profiles = [];
+
     for (let address in states.token_uris) {
+      const balance = await zilliqa.blockchain.getBalance(address);
+      const result = balance.result.balance;
+      const result_float = result / 1000000000000;
       try {
         const data = await fetch(states.token_uris[address][1]).then((res) =>
           res.json()
@@ -28,16 +32,18 @@ export default function Profiles() {
           address,
           profile_uri: states.token_uris[address][0],
           data_uri: states.token_uris[address][1],
+          balance: result_float,
           data,
         };
         _profiles.push(profile);
+        // balance
       } catch (err) {
         console.log(err);
       }
     }
 
     setProfiles(_profiles);
-  }, [zilliqa.contracts]);
+  }, [zilliqa.contracts, zilliqa.blockchain]);
   // const names = profiles?.map(({ data_uri }) => {
   //   fetch(data_uri)
   //     .then((response) => response.json())
@@ -63,7 +69,7 @@ export default function Profiles() {
           </tr>
         </thead>
         <tbody> */}
-        {profiles.map(({ address, profile_uri, data_uri, data }) => (
+        {profiles.map(({ address, profile_uri, data_uri, balance, data }) => (
           <div className="card">
             <a href={`/profiles/${address}`}>
               <div className="card-image">
@@ -145,7 +151,9 @@ export default function Profiles() {
                       </defs>
                     </svg>
 
-                    <p className="text-lg text-white flex items-center">0.18</p>
+                    <p className="text-lg text-white flex items-center">
+                      {balance}
+                    </p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/${address}`}
                       className="ml-auto w-5 pl-4 mr-6"

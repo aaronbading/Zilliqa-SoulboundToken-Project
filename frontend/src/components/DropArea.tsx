@@ -6,7 +6,11 @@ import { useForm } from "react-hook-form";
 import { scillaJSONParams } from "@zilliqa-js/scilla-json-utils";
 import React, { useEffect } from "react";
 import { AiOutlineBlock } from "react-icons/ai";
+import { FcImageFile } from "react-icons/fc";
 import Button from "../components/Button";
+import Loader from "../assets/loader.gif";
+import cn from "classnames";
+import Link from "../components/Link";
 
 const FormField = ({
   id,
@@ -21,19 +25,16 @@ const FormField = ({
   errors: any;
 } & React.HTMLProps<HTMLInputElement>) => {
   return (
-    <div className="md:flex md:items-center mb-7">
-      <div className="md:w-1/3">
-        <label
-          className="block text-gray-500 font-bold mb-1 md:mb-0 pr-4"
-          htmlFor={id}
-        >
+    <div className="mb-4">
+      <div className="w-full">
+        <label className="block text-white font-bold mb-1 md:mb-0" htmlFor={id}>
           {label}
         </label>
       </div>
       <div className="md:w-2/3 relative">
         <input
           {...register(id)}
-          className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 invalid:border-red-500"
+          className="block bg-gray-300 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 invalid:border-red-500"
           id={id}
           {...inputProps}
         ></input>
@@ -51,8 +52,11 @@ const DropArea = () => {
   );
   const { storeFiles, storeJson } = useStorage();
   const { wallet, callContract } = useWallet();
+  // const { callContract } = useZilliqa();
   const [err, setErr] = useState<string | boolean>(false);
   const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setLoading] = useState<string | boolean>(false);
+  const [isMinted, setMinted] = useState<string | boolean>(false);
 
   const {
     register,
@@ -67,8 +71,12 @@ const DropArea = () => {
     }
   }, [setValue, wallet]);
 
-  const uploadImage = async () => {
+  const uploadImage = () => {
     // Router.push(`/result?url=${imageURI}`);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 30000);
   };
   const onSubmit = handleSubmit(async ({ walletAddress, ...data }) => {
     //TODO : input validation before creating links
@@ -94,7 +102,14 @@ const DropArea = () => {
     // TODO: Check for transaction conformation
     // console.log("transaction: %o", tx.id);
     // console.log(JSON.stringify(tx.receipt, null, 4));
-    console.log(tx.receipt);
+    try {
+      console.log(tx);
+      console.log("HELLO ??");
+    } catch (error) {
+      console.log("error");
+    }
+    uploadImage();
+    setMinted(true);
   });
 
   const onDrop = (e: React.DragEvent) => {
@@ -130,27 +145,30 @@ const DropArea = () => {
   };
 
   return (
-    <>
+    <div className="flex justify-between w-2/3 container mx-auto">
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => onDrop(e)}
-        className={styles.card}
+        className="drag-drop"
       >
         {data !== null && (
-          <img className={styles.image} src={data?.toString()} alt="" />
+          <>
+            <img className={styles.image} src={data?.toString()} alt="" />
+            <button className="form-btn" onClick={() => setData(null)}>
+              Remove Image
+            </button>
+          </>
         )}
         {data === null && (
-          <p className={styles.dropAreaText}>Drag and drop image</p>
+          <p className={styles.dropAreaText}>
+            Drag and drop image <FcImageFile className="inline-block" />
+          </p>
         )}
       </div>
       {err && <p>Unable to upload image</p>}
       {data !== null && (
-        <div>
-          <button className={styles.deleteButton} onClick={() => setData(null)}>
-            Remove Image
-          </button>
-
-          <form onSubmit={onSubmit} className="w-full max-w-md object-center">
+        <div className="mint-form mx-auto flex flex-col justify-center items-center">
+          <form onSubmit={onSubmit} className="w-full">
             <FormField
               id="walletAddress"
               label="Wallet Address"
@@ -174,22 +192,50 @@ const DropArea = () => {
             />
 
             <div className="md:flex md:items-center">
-              <div className="md:w-1/3"></div>
+              <div className=""></div>
               <div className="md:w-2/3">
-                <Button
+                {/* <Button
                   type="submit"
                   className={styles.uploadButton}
                   onClick={() => uploadImage()}
                 >
                   <AiOutlineBlock className="scale-150" />
                   Mint
-                </Button>
+                </Button> */}
+
+                {isMinted ? (
+                  isLoading ? (
+                    <div>
+                      <img src={Loader} width="50" alt="" />
+                      <div
+                        className={cn(
+                          "text-white",
+                          "font-bold",
+                          "pt-2",
+                          "text-2xl"
+                        )}
+                      >
+                        Waiting for transaction to reach the network...{"\n"}{" "}
+                        Your Sbt will appear among the others shortly.
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-center mt-3">
+                      <Link to="/profiles">View Profiles</Link>
+                    </div>
+                  )
+                ) : (
+                  <Button type="submit" className={styles.uploadButton}>
+                    <AiOutlineBlock className="scale-150" />
+                    Mint
+                  </Button>
+                )}
               </div>
             </div>
           </form>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

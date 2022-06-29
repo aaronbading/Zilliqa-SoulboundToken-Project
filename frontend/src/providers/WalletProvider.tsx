@@ -43,7 +43,7 @@ function WalletProvider({ children }: Props) {
         "0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b"
       );
 
-      const callTx = await contract.call(transition, args, {
+      const callTx = contract.call(transition, args, {
         ...TX_PARAMS,
         ...params,
       });
