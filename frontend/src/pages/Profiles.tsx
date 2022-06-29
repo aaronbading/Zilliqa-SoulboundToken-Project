@@ -19,12 +19,21 @@ export default function Profiles() {
 
     const _profiles = [];
     for (let address in states.token_uris) {
-      const profile = {
-        address,
-        profile_uri: states.token_uris[address][0],
-        data_uri: states.token_uris[address][1],
-      };
-      _profiles.push(profile);
+      try {
+        const data = await fetch(states.token_uris[address][1]).then((res) =>
+          res.json()
+        );
+
+        const profile = {
+          address,
+          profile_uri: states.token_uris[address][0],
+          data_uri: states.token_uris[address][1],
+          data,
+        };
+        _profiles.push(profile);
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     setProfiles(_profiles);
@@ -54,15 +63,15 @@ export default function Profiles() {
           </tr>
         </thead>
         <tbody> */}
-        {profiles.map(({ address, profile_uri, data_uri }) => (
+        {profiles.map(({ address, profile_uri, data_uri, data }) => (
           <div className="card">
             <a href={`/profiles/${address}`}>
               <div className="card-image">
-                <img src={profile_uri} title="Woman holding a mug" alt=""></img>
+                <img src={profile_uri} title="" alt=""></img>
               </div>
               <div className="px-5 py-2">
                 <div className="mb-4">
-                  <p className="card-name mt-4">@NFT_Creator</p>
+                  <p className="card-name mt-4">@{data?.name}</p>
                   <div className="flex mt-2 mb-2">
                     <img
                       src="https://i.postimg.cc/zBDtJMJk/image-1.png"

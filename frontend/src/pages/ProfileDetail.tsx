@@ -11,12 +11,17 @@ const ProfileDetail = () => {
   const { zilliqa } = useZilliqa();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [copied, setCopied] = useState<Boolean>();
-
+  const [balance, setBalance] = useState<number>(0);
   const getZBTStates = useCallback(async () => {
     if (address) {
       const states = await zilliqa.contracts
         .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
         .getState();
+
+      const balance = await zilliqa.blockchain.getBalance(address);
+      const result = balance.result.balance;
+      const result_float = result / 1000000000000;
+      setBalance(result_float);
 
       try {
         const data = await fetch(states.token_uris[address][1]).then((res) =>
@@ -32,7 +37,8 @@ const ProfileDetail = () => {
         console.log(err);
       }
     }
-  }, [address, zilliqa.contracts]);
+  }, [address, zilliqa.contracts, zilliqa.blockchain]);
+
   const copyToClipboard = useCallback((text: any) => {
     navigator.clipboard?.writeText(text);
     setCopied(true);
@@ -44,10 +50,6 @@ const ProfileDetail = () => {
   useEffect(() => {
     getZBTStates();
   }, [getZBTStates]);
-
-  useEffect(() => {
-    console.log(profile);
-  }, [profile]);
 
   if (!profile) return <div>Loading...</div>;
 
@@ -99,7 +101,7 @@ const ProfileDetail = () => {
         alt=""
       />
       <div className="container px-6 mx-auto profile-details">
-        <img src={profile.data?.image} alt="" className="profile-img" />
+        <img src={profile.profile_uri} alt="" className="profile-img" />
         <div className="flex justify-between">
           <div className="profile-bio">
             <p className="profile-name">@{profile.data?.name}</p>
@@ -184,7 +186,7 @@ const ProfileDetail = () => {
               </svg>
 
               <p className="profile-amount text-white flex items-center">
-                0.18
+                {balance}
               </p>
             </div>
           </div>

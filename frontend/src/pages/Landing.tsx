@@ -133,7 +133,7 @@ export default function Landing() {
                       </p>
                       <a
                         href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/0x3227edf3d8ef577170f339689a128ce229dd8df2`}
-                        className="ml-auto mr-2 w-5 pl-4 mr-6"
+                        className="ml-auto mr-2 w-5 pl-4"
                       >
                         <svg
                           width="24"
@@ -616,7 +616,7 @@ export default function Landing() {
                     <p className="text-lg text-white flex items-center">0.18</p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/0x3227edf3d8ef577170f339689a128ce229dd8df2`}
-                      className="ml-auto mr-2 w-5 pl-4 mr-6"
+                      className="ml-auto mr-2 w-5 pl-4 "
                     >
                       <svg
                         width="24"
@@ -734,7 +734,7 @@ export default function Landing() {
                     <p className="text-lg text-white flex items-center">0.18</p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/0x3227edf3d8ef577170f339689a128ce229dd8df2`}
-                      className="ml-auto mr-2 w-5 pl-4 mr-6"
+                      className="ml-auto mr-2 w-5 pl-4 "
                     >
                       <svg
                         width="24"
@@ -852,7 +852,7 @@ export default function Landing() {
                     <p className="text-lg text-white flex items-center">0.18</p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/0x3227edf3d8ef577170f339689a128ce229dd8df2`}
-                      className="ml-auto mr-2 w-5 pl-4 mr-6"
+                      className="ml-auto mr-2 w-5 pl-4"
                     >
                       <svg
                         width="24"
@@ -970,7 +970,7 @@ export default function Landing() {
                     <p className="text-lg text-white flex items-center">0.18</p>
                     <a
                       href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20profile%20on%20Zilsbt%3A%0A%0Ahttp%3A//localhost%3A3000/profiles/0x3227edf3d8ef577170f339689a128ce229dd8df2`}
-                      className="ml-auto mr-2 w-5 pl-4 mr-6"
+                      className="ml-auto mr-2 w-5 pl-4"
                     >
                       <svg
                         width="24"
