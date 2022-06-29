@@ -1,37 +1,36 @@
-import { useCallback, useEffect, useState } from 'react';
-import { AiOutlineCopy } from 'react-icons/ai';
-import { useParams } from 'react-router-dom';
+import { useCallback, useEffect, useState } from "react";
+import { AiOutlineCopy } from "react-icons/ai";
+import { useParams } from "react-router-dom";
 // import Table from '../components/Table/Table';
 // import TableCell from '../components/Table/TableCell';
-import { useZilliqa } from '../providers/ZilliqaProvider';
-import { Profile } from '../types/types';
-import { Link } from 'react-router-dom';
+import { useZilliqa } from "../providers/ZilliqaProvider";
+import { Profile } from "../types/types";
+import { Link } from "react-router-dom";
 
 const ProfileDetail = () => {
   const { address } = useParams();
   const { zilliqa } = useZilliqa();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [copied, setCopied] = useState<Boolean>();
-  const [balance, setBalance] = useState<number>(0);
   const getZBTStates = useCallback(async () => {
     if (address) {
       const states = await zilliqa.contracts
-        .at('0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b')
+        .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
         .getState();
 
       const balance = await zilliqa.blockchain.getBalance(address);
       const result = balance.result.balance;
       const result_float = result / 1000000000000;
-      setBalance(result_float);
 
       try {
         const data = await fetch(states.token_uris[address][1]).then((res) =>
-          res.json(),
+          res.json()
         );
         setProfile({
           address,
           profile_uri: states.token_uris[address][0],
           data_uri: states.token_uris[address][1],
+          balance: result_float,
           data,
         });
       } catch (err) {
@@ -115,7 +114,7 @@ const ProfileDetail = () => {
               />
               <p className="text-md text-gray-200 flex items-center">
                 {String(address).substring(0, 6) +
-                  '...' +
+                  "..." +
                   String(address).substring(38)}
               </p>
               <AiOutlineCopy
@@ -187,7 +186,7 @@ const ProfileDetail = () => {
               </svg>
 
               <p className="profile-amount text-white flex items-center">
-                {balance}
+                {profile.balance}
               </p>
             </div>
           </div>

@@ -1,12 +1,12 @@
 // import cn from 'classnames';
 // import { profile } from 'console';
 // import { request } from 'https';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 // import Table from '../components/Table/Table';
 // import TableCell from '../components/Table/TableCell';
 // import TableHead from '../components/Table/TableHead';
-import { useZilliqa } from '../providers/ZilliqaProvider';
-import { Profile } from '../types/types';
+import { useZilliqa } from "../providers/ZilliqaProvider";
+import { Profile } from "../types/types";
 
 export default function Profiles() {
   const { zilliqa } = useZilliqa();
@@ -15,28 +15,29 @@ export default function Profiles() {
 
   const getZBTStates = useCallback(async () => {
     const states = await zilliqa.contracts
-      .at('0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b')
+      .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
       .getState();
 
     const _profiles = [];
+
     for (let address in states.token_uris) {
+      const balance = await zilliqa.blockchain.getBalance(address);
+      const result = balance.result.balance;
+      const result_float = result / 1000000000000;
       try {
         const data = await fetch(states.token_uris[address][1]).then((res) =>
-          res.json(),
+          res.json()
         );
 
         const profile = {
           address,
           profile_uri: states.token_uris[address][0],
           data_uri: states.token_uris[address][1],
+          balance: result_float,
           data,
         };
         _profiles.push(profile);
         // balance
-        const balance = await zilliqa.blockchain.getBalance(profile.address);
-        const result = balance.result.balance;
-        const result_float = result / 1000000000000;
-        setBalance(result_float);
       } catch (err) {
         console.log(err);
       }
@@ -69,7 +70,7 @@ export default function Profiles() {
           </tr>
         </thead>
         <tbody> */}
-        {profiles.map(({ address, profile_uri, data_uri, data }) => (
+        {profiles.map(({ address, profile_uri, data_uri, balance, data }) => (
           <div className="card">
             <a href={`/profiles/${address}`}>
               <div className="card-image">
@@ -86,7 +87,7 @@ export default function Profiles() {
                     />
                     <p className="text-md text-gray-200 flex items-center">
                       {String(address).substring(0, 6) +
-                        '...' +
+                        "..." +
                         String(address).substring(38)}
                     </p>
                   </div>
