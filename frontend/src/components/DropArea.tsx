@@ -8,6 +8,7 @@ import React, { useEffect } from 'react';
 import { AiOutlineBlock } from 'react-icons/ai';
 import { FcImageFile } from 'react-icons/fc';
 import Button from '../components/Button';
+import Loader from '../assets/loader.gif';
 
 const FormField = ({
   id,
@@ -51,7 +52,7 @@ const DropArea = () => {
   const { wallet, callContract } = useWallet();
   const [err, setErr] = useState<string | boolean>(false);
   const [file, setFile] = useState<File | null>(null);
-
+  const [isLoading, setLoading] = useState<string | boolean>(false);
   const {
     register,
     handleSubmit,
@@ -67,6 +68,10 @@ const DropArea = () => {
 
   const uploadImage = async () => {
     // Router.push(`/result?url=${imageURI}`);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 30000);
   };
   const onSubmit = handleSubmit(async ({ walletAddress, ...data }) => {
     //TODO : input validation before creating links
@@ -177,14 +182,26 @@ const DropArea = () => {
             <div className="md:flex md:items-center">
               <div className=""></div>
               <div className="md:w-2/3">
-                <Button
+                {/* <Button
                   type="submit"
                   className={styles.uploadButton}
                   onClick={() => uploadImage()}
                 >
                   <AiOutlineBlock className="scale-150" />
                   Mint
-                </Button>
+                </Button> */}
+                {isLoading ? (
+                  <img src={Loader} width="50" alt="" />
+                ) : (
+                  <Button
+                    type="submit"
+                    className={styles.uploadButton}
+                    onClick={() => uploadImage()}
+                  >
+                    <AiOutlineBlock className="scale-150" />
+                    Mint
+                  </Button>
+                )}
               </div>
             </div>
           </form>
