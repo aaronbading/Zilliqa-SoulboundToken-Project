@@ -77,7 +77,9 @@ function Navbar() {
         </Link>
         {wallet ? (
           <div className={cn("flex", "items-center", "gap-4")}>
-            <h1 className={cn("lowercase", "text-white")}>{walletAddress}</h1>
+            <h1 className={cn("lowercase", "text-white text-lg")}>
+              {walletAddress}
+            </h1>
 
             <Button className="button-primary" onClick={() => disconnect()}>
               <AiOutlineLogout />

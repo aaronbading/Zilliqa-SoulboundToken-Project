@@ -1,0 +1,28 @@
+scilla_version 0
+
+import BoolUtils as BoolU
+library Proxy
+
+let one_msg = 
+  fun (msg : Message) => 
+    let nil_msg = Nil {Message} in
+    Cons {Message} msg nil_msg
+    
+contract Proxy()
+(* contract address :  *)
+(* This is a transition that calls a transition of another contract *)
+(* Specifically , it calls ExampleWithParams of the contract that is specified in the parameter example_contract_address *)
+(* Reference --->> https://scilla-cookbook.org/recipes/scilla-recipes/messages *)
+transition EarnIt(core_contract_address: ByStr20 , receipient_address: ByStr20)
+    earn_achievement = Uint256 1;
+
+    example_contract_call = {
+        _tag: "Earn_achievement";
+        _recipient: core_contract_address;
+        _amount: Uint128 0;
+        to: receipient_address;
+        value: earn_achievement
+    };
+    msgs = one_msg example_contract_call;
+    send msgs
+end

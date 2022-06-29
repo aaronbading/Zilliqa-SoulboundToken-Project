@@ -25,7 +25,8 @@ const content: AdaptiveContentProps[] = [
     subtitle: "Deploying the smart contract and earning the achievement",
     content:
       "After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile",
-    subcontent: " ",
+    subcontent:
+      " There is an example scilla smart contract that achieves this at address : 0xde5a7833f99c421ac4803d50c0bca031fe234c2b. It takes as parameters our core contract address : 0xb019d93b6ad4b8e7339a1042ede50341a77cca0f and the receipt wallet address . Check out the sample in the Zilliqua Explorer if you get stuck. Good Luck .  ",
   },
 ];
 
