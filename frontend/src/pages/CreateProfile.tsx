@@ -8,7 +8,8 @@ const content: AdaptiveContentProps[] = [
     subtitle: "Setting up some TestNet Zil ",
     content: "Install ZilPay and familiarize yourself with the wallet .",
     subcontent:
-      "Then head over to the Official Zil faucet and request some Test Zil for your wallet. Now you are ready to Mint your SBT Profile ",
+      "Then head over to the Official Zil faucet and request some Test Zil for your wallet." +
+      " Now you are ready to Mint your SBT Profile ",
   },
 ];
 const CreateProfile = () => {

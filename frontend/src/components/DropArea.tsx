@@ -79,7 +79,6 @@ const DropArea = () => {
   };
   const onSubmit = handleSubmit(async ({ walletAddress, ...data }) => {
     //TODO : input validation before creating links
-    console.log("HELLO ??");
 
     const imageURI = await storeFiles(file);
 

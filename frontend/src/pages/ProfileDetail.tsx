@@ -12,6 +12,8 @@ const ProfileDetail = () => {
   const { zilliqa } = useZilliqa();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [copied, setCopied] = useState<Boolean>();
+  const [description, setDescription] = useState<string>();
+
   const getZBTStates = useCallback(async () => {
     if (address) {
       const states = await zilliqa.contracts
@@ -36,6 +38,10 @@ const ProfileDetail = () => {
       } catch (err) {
         console.log(err);
       }
+      const userData = await fetch(states.token_uris[address][1]).then((res) =>
+        res.json()
+      );
+      setDescription(userData.id);
     }
   }, [address, zilliqa.contracts, zilliqa.blockchain]);
 
@@ -54,45 +60,6 @@ const ProfileDetail = () => {
   if (!profile) return <div>Loading...</div>;
 
   return (
-    // <div className="sm:mx-10">
-    //   <h1 className="text-4xl font-bold tracking-wide">Profile</h1>
-    //   <div className="flex flex-col sm:flex-row-reverse items-center sm:justify-around sm:items-start my-20 mr-4">
-    //     <div>
-    //       <img
-    //         alt="profile"
-    //         src={profile.profile_uri}
-    //         className="rounded-full w-32 h-32 mb-8 sm:w-60 sm:h-60"
-    //       />
-    //       <img
-    //         alt="profile"
-    //         src={profile.data?.image}
-    //         className="rounded-full w-32 h-32 mb-8 sm:w-60 sm:h-60"
-    //       />
-    //     </div>
-    //     <div className="flex flex-col">
-    //       <h2 className="border-b font-bold tracking-wide">Info</h2>
-    //       <Table>
-    //         <tr>
-    //           <TableCell isIndex={true}>ID</TableCell>
-    //           <TableCell>{profile.data?.tokenId}</TableCell>
-    //         </tr>
-    //         <tr>
-    //           <TableCell isIndex={true}>Name</TableCell>
-    //           <TableCell>{profile.data?.name}</TableCell>
-    //         </tr>
-    //       </Table>
-    //       <h2 className="border-b font-bold tracking-wide mt-8">Attributes</h2>
-    //       <Table>
-    //         {profile.data?.attributes?.map(({ trait_type, value }: any) => (
-    //           <tr key={trait_type}>
-    //             <TableCell isIndex={true}>{trait_type}</TableCell>
-    //             <TableCell>{value}</TableCell>
-    //           </tr>
-    //         ))}
-    //       </Table>
-    //     </div>
-    //   </div>
-    // </div>
     <>
       <img
         className="profile-cover"
@@ -257,12 +224,12 @@ const ProfileDetail = () => {
 
         {/* profile-description */}
         <p className="profile-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum
-          doloremque eveniet possimus exercitationem inventore. Nulla nostrum
-          suscipit placeat! Dolor, ut.
+          <div> Description :</div>
+          {description ? description : "N/A"}
         </p>
+
         <Link to="/educational" className="cta-secondary my-4">
-          Education
+          Earn Achievement
         </Link>
       </div>
       {copied && (
