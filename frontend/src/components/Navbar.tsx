@@ -69,10 +69,10 @@ function Navbar() {
         <div className="flex m-3">
           <Switch onClick={() => toggleTheme()} />
         </div>
-        <Link className="nav-link" to="profiles">
+        <Link className="nav-link hover:text-blue-600" to="profiles">
           Profiles
         </Link>
-        <Link className="nav-link" to="educational">
+        <Link className="nav-link hover:text-blue-600" to="educational">
           Educate
         </Link>
         {wallet ? (

@@ -98,7 +98,7 @@ const ProfileDetail = () => {
         src="https://images.unsplash.com/photo-1586672806791-3a67d24186c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Y292ZXIlMjBhcnR8ZW58MHx8MHx8&w=1000&q=80"
         alt=""
       />
-      <div className="container px-6 mx-auto profile-details">
+      <div className="container px-6 mx-auto profile-details hover:text-black">
         <img src={profile.profile_uri} alt="" className="profile-img" />
         <div className="flex justify-between">
           <div className="profile-bio">
