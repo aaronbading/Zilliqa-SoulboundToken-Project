@@ -44,7 +44,7 @@ Email: devchain7890@gmail.com
 Github: @hougangdev https://github.com/hougangdev
 
 ### Mumeen
-Email:
+Email: azeezmumeen6@gmail.com
 Github: @mum33n https://github.com/mum33n
 
 ### Yosh
