@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import styles from '../styles/Home.module.css';
-import { useStorage } from '../providers/Web3StorageProvider';
-import { useWallet } from '../providers/WalletProvider';
-import { useForm } from 'react-hook-form';
-import { scillaJSONParams } from '@zilliqa-js/scilla-json-utils';
-import React, { useEffect } from 'react';
-import { AiOutlineBlock } from 'react-icons/ai';
-import { FcImageFile } from 'react-icons/fc';
-import Button from '../components/Button';
-import Loader from '../assets/loader.gif';
+import { useState } from "react";
+import styles from "../styles/Home.module.css";
+import { useStorage } from "../providers/Web3StorageProvider";
+import { useWallet } from "../providers/WalletProvider";
+import { useForm } from "react-hook-form";
+import { scillaJSONParams } from "@zilliqa-js/scilla-json-utils";
+import React, { useEffect } from "react";
+import { AiOutlineBlock } from "react-icons/ai";
+import { FcImageFile } from "react-icons/fc";
+import Button from "../components/Button";
+import Loader from "../assets/loader.gif";
 
 const FormField = ({
   id,
@@ -46,7 +46,7 @@ const FormField = ({
 
 const DropArea = () => {
   const [data, setData] = useState<ArrayBuffer | string | null | undefined>(
-    null,
+    null
   );
   const { storeFiles, storeJson } = useStorage();
   const { wallet, callContract } = useWallet();
@@ -62,7 +62,7 @@ const DropArea = () => {
 
   useEffect(() => {
     if (wallet) {
-      setValue('walletAddress', wallet.defaultAccount.base16);
+      setValue("walletAddress", wallet.defaultAccount.base16);
     }
   }, [setValue, wallet]);
 
@@ -75,6 +75,7 @@ const DropArea = () => {
   };
   const onSubmit = handleSubmit(async ({ walletAddress, ...data }) => {
     //TODO : input validation before creating links
+    console.log("HELLO ??");
 
     const imageURI = await storeFiles(file);
 
@@ -86,18 +87,24 @@ const DropArea = () => {
     const nameUri = await storeJson(jsonString);
 
     const tx = await callContract(
-      'Mint',
+      "Mint",
       scillaJSONParams({
-        to: ['ByStr20', walletAddress],
-        picture_uri: ['String', `${imageURI}`],
-        data_uri: ['String', `${nameUri}`],
-      }),
+        to: ["ByStr20", walletAddress],
+        picture_uri: ["String", `${imageURI}`],
+        data_uri: ["String", `${nameUri}`],
+      })
     );
 
     // TODO: Check for transaction conformation
     // console.log("transaction: %o", tx.id);
     // console.log(JSON.stringify(tx.receipt, null, 4));
-    console.log(tx.receipt);
+    try {
+      console.log(tx);
+      console.log("HELLO ??");
+    } catch (error) {
+      console.log("error");
+    }
+    uploadImage();
   });
 
   const onDrop = (e: React.DragEvent) => {
@@ -110,17 +117,17 @@ const DropArea = () => {
     if (length === 0) {
       return false;
     }
-    const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const fileTypes = ["image/jpeg", "image/jpg", "image/png"];
     const { size, type } = files[0];
     setData(null);
     // Limit to either image/jpeg, image/jpg or image/png file
     if (!fileTypes.includes(type)) {
-      setErr('File format must be either png or jpg');
+      setErr("File format must be either png or jpg");
       return false;
     }
     // Check file size to ensure it is less than 2MB.
     if (size / 1024 / 1024 > 2) {
-      setErr('File size exceeded the limit of 2MB');
+      setErr("File size exceeded the limit of 2MB");
       return false;
     }
     setErr(false);
@@ -193,11 +200,7 @@ const DropArea = () => {
                 {isLoading ? (
                   <img src={Loader} width="50" alt="" />
                 ) : (
-                  <Button
-                    type="submit"
-                    className={styles.uploadButton}
-                    onClick={() => uploadImage()}
-                  >
+                  <Button type="submit" className={styles.uploadButton}>
                     <AiOutlineBlock className="scale-150" />
                     Mint
                   </Button>
