@@ -8,7 +8,7 @@ const AdaptiveContent: React.FC<AdaptiveContentProps> = ({
 }) => {
   return (
     <section>
-      <h2 className="title-font sm:text-1xl text-3xl mb-4 font-medium text-gray-900 dark:text-white my-12">
+      <h2 className="title-font sm:text-1xl text-3xl mb-4 font-medium text-white  dark:text-white my-12">
         {title}
       </h2>
 
