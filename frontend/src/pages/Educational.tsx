@@ -9,21 +9,23 @@ const content: AdaptiveContentProps[] = [
     title: "The Set Up",
     subtitle: "Setting up the Neo Savant IDE and Zilpay wallet",
     content:
-      "Download Zilpay wallet. Create another account on your ZilPay wallet. Request testnet $ZIL from faucet by following instructions in the link below. Switch to testnet on your IDE and your set up is complete!",
-      /*Zilpay walllet link: https://zilpay.io/*/
-      /*https://dev.zilliqa.com/docs/dev/dev-tools-faucet/*/
+      "Head to Neo Savant IDE. Create another account on your ZilPay. Request testnet $ZIL from faucet. Switch to testnet on your IDE.",
+    subcontent: " ",
   },
   {
     title: "Scilla Language",
     subtitle: "Writing your smart contract",
     content:
       "Create a new file by clicking the file icon on the upper left corner. Refer to the smart contracts in our github repository.(Zilliqa-Soulbound-Project/contract/example/proxy.scilla) modify it such that you can call the transition Earn_achievement in SBT_profile.",
+    subcontent: " ",
   },
+
   {
     title: "Achievement Unlocked!",
     subtitle: "Deploying the smart contract and earning the achievement",
     content:
-      "After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile.",
+      "After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile",
+    subcontent: " ",
   },
 ];
 
@@ -41,6 +43,7 @@ export default function Educational() {
               title={items.title}
               subtitle={items.subtitle}
               content={items.content}
+              subcontent={items.subcontent}
             />
           ))}
 

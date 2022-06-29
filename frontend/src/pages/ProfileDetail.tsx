@@ -1,22 +1,31 @@
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineCopy } from "react-icons/ai";
 import { useParams } from "react-router-dom";
-// import Table from '../components/Table/Table';
-// import TableCell from '../components/Table/TableCell';
 import { useZilliqa } from "../providers/ZilliqaProvider";
 import { Profile } from "../types/types";
+import { Link } from "react-router-dom";
+import Button from "../components/Button";
+import { scillaJSONParams } from "@zilliqa-js/scilla-json-utils";
+import { useWallet } from "../providers/WalletProvider";
 
 const ProfileDetail = () => {
   const { address } = useParams();
   const { zilliqa } = useZilliqa();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [copied, setCopied] = useState<Boolean>();
+  const [description, setDescription] = useState<string>();
+  const { wallet, callContract } = useWallet();
+  const [allowedToBurn, setallowedToBurn] = useState<Boolean>(false);
 
   const getZBTStates = useCallback(async () => {
     if (address) {
       const states = await zilliqa.contracts
         .at("0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b")
         .getState();
+
+      const balance = await zilliqa.blockchain.getBalance(address);
+      const result = balance.result.balance;
+      const result_float = result / 1000000000000;
 
       try {
         const data = await fetch(states.token_uris[address][1]).then((res) =>
@@ -26,13 +35,19 @@ const ProfileDetail = () => {
           address,
           profile_uri: states.token_uris[address][0],
           data_uri: states.token_uris[address][1],
+          balance: result_float,
           data,
         });
       } catch (err) {
         console.log(err);
       }
+      const userData = await fetch(states.token_uris[address][1]).then((res) =>
+        res.json()
+      );
+      setDescription(userData.id);
     }
-  }, [address, zilliqa.contracts]);
+  }, [address, zilliqa.contracts, zilliqa.blockchain]);
+
   const copyToClipboard = useCallback((text: any) => {
     navigator.clipboard?.writeText(text);
     setCopied(true);
@@ -41,56 +56,41 @@ const ProfileDetail = () => {
     }, 2000);
   }, []);
 
-  useEffect(() => {
-    getZBTStates();
-  }, [getZBTStates]);
+  const Burn = useCallback(async () => {
+    console.log("Burn ");
+    try {
+      const tx = await callContract(
+        "Burn",
+        scillaJSONParams({
+          to: ["ByStr20", profile?.address],
+        })
+      );
+
+      console.log(tx.isPending());
+      console.log(tx.isConfirmed());
+      console.log("YAAAAY");
+    } catch (error) {
+      console.log(error);
+    }
+  }, [callContract, profile?.address]);
 
   useEffect(() => {
-    console.log(profile);
-  }, [profile]);
+    getZBTStates();
+
+    if (address) {
+      if (wallet) {
+        if (address === wallet.defaultAccount.base16.toString().toLowerCase()) {
+          setallowedToBurn(true);
+        }
+      } else {
+        setallowedToBurn(false);
+      }
+    }
+  }, [getZBTStates, address, wallet, allowedToBurn]);
 
   if (!profile) return <div>Loading...</div>;
 
   return (
-    // <div className="sm:mx-10">
-    //   <h1 className="text-4xl font-bold tracking-wide">Profile</h1>
-    //   <div className="flex flex-col sm:flex-row-reverse items-center sm:justify-around sm:items-start my-20 mr-4">
-    //     <div>
-    //       <img
-    //         alt="profile"
-    //         src={profile.profile_uri}
-    //         className="rounded-full w-32 h-32 mb-8 sm:w-60 sm:h-60"
-    //       />
-    //       <img
-    //         alt="profile"
-    //         src={profile.data?.image}
-    //         className="rounded-full w-32 h-32 mb-8 sm:w-60 sm:h-60"
-    //       />
-    //     </div>
-    //     <div className="flex flex-col">
-    //       <h2 className="border-b font-bold tracking-wide">Info</h2>
-    //       <Table>
-    //         <tr>
-    //           <TableCell isIndex={true}>ID</TableCell>
-    //           <TableCell>{profile.data?.tokenId}</TableCell>
-    //         </tr>
-    //         <tr>
-    //           <TableCell isIndex={true}>Name</TableCell>
-    //           <TableCell>{profile.data?.name}</TableCell>
-    //         </tr>
-    //       </Table>
-    //       <h2 className="border-b font-bold tracking-wide mt-8">Attributes</h2>
-    //       <Table>
-    //         {profile.data?.attributes?.map(({ trait_type, value }: any) => (
-    //           <tr key={trait_type}>
-    //             <TableCell isIndex={true}>{trait_type}</TableCell>
-    //             <TableCell>{value}</TableCell>
-    //           </tr>
-    //         ))}
-    //       </Table>
-    //     </div>
-    //   </div>
-    // </div>
     <>
       <img
         className="profile-cover"
@@ -99,7 +99,7 @@ const ProfileDetail = () => {
         alt=""
       />
       <div className="container px-6 mx-auto profile-details hover:text-black">
-        <img src={profile.data?.image} alt="" className="profile-img" />
+        <img src={profile.profile_uri} alt="" className="profile-img" />
         <div className="flex justify-between">
           <div className="profile-bio">
             <p className="profile-name">@{profile.data?.name}</p>
@@ -184,10 +184,12 @@ const ProfileDetail = () => {
               </svg>
 
               <p className="profile-amount text-white flex items-center">
-                0.18
+                {profile.balance}
               </p>
             </div>
           </div>
+          {/* educate button */}
+
           <div className="mt-12 flex sm:space-x-0 md:space-x-3 social-bar">
             {/* social handles */}
 
@@ -250,12 +252,23 @@ const ProfileDetail = () => {
             </a>
           </div>
         </div>
+
         {/* profile-description */}
         <p className="profile-description">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum
-          doloremque eveniet possimus exercitationem inventore. Nulla nostrum
-          suscipit placeat! Dolor, ut.
+          <div> Description :</div>
+          {description ? description : "N/A"}
         </p>
+
+        <Link to="/educational" className="cta-secondary my-4">
+          Earn Achievement
+        </Link>
+        {allowedToBurn ? (
+          <Button className="button-primary bg-red-600" onClick={() => Burn()}>
+            Burn Profile
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
       {copied && (
         <div className="absolute flex justify-center w-full top-5 left-0">
