@@ -48,7 +48,7 @@ Email:
 Github: @mum33n https://github.com/mum33n
 
 ### Yosh
-Email: 
+Email: imyosh4@gmail.com
 Github: @imyosh https://github.com/imyosh
 
 ### John
