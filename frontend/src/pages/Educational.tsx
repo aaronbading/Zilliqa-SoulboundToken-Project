@@ -6,10 +6,12 @@ import { AdaptiveContentProps } from "../types/types";
 
 const content: AdaptiveContentProps[] = [
   {
-    title: "Neo Savant IDE",
-    subtitle: "Setting up the Neo Savant IDE",
+    title: "The Set Up",
+    subtitle: "Setting up the Neo Savant IDE and Zilpay wallet",
     content:
-      "Head to Neo Savant IDE. Create another account on your ZilPay. Request testnet $ZIL from faucet. Switch to testnet on your IDE.",
+      "Download Zilpay wallet. Create another account on your ZilPay wallet. Request testnet $ZIL from faucet by following instructions in the link below. Switch to testnet on your IDE and your set up is complete!",
+      /*Zilpay walllet link: https://zilpay.io/*/
+      /*https://dev.zilliqa.com/docs/dev/dev-tools-faucet/*/
   },
   {
     title: "Scilla Language",
@@ -19,9 +21,9 @@ const content: AdaptiveContentProps[] = [
   },
   {
     title: "Achievement Unlocked!",
-    subtitle: "Deploying the smart contract and earnign the achievement",
+    subtitle: "Deploying the smart contract and earning the achievement",
     content:
-      "After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile",
+      "After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile.",
   },
 ];
 
