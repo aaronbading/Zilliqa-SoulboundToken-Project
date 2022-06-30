@@ -36,8 +36,8 @@ const Switch = ({ children, className, ...props }: ButtonProps) => {
                 htmlFor="dark-mode-toggle"
                 className="align-middle w-full h-full bg-gray-800 dark:bg-white rounded-full p-1 flex justify-between cursor-pointer"
               >
-                <span className="inline dark:hidden">🌞</span>
-                <span className="hidden dark:inline">🌛</span>
+                <span className="inline dark:hidden">🌛</span>
+                <span className="hidden dark:inline">🌞</span>
               </label>
             </div>
           </div>

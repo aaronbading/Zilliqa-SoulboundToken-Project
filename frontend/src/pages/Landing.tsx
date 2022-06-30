@@ -27,7 +27,7 @@ const content: AdaptiveContentProps[] = [
 
 export default function Landing() {
   return (
-    <div className="text-gray-700 dark:text-white body-font ">
+    <div className="text-white dark:text-white body-font ">
       <div className="hero container mx-auto 2xl:px-28 sm:px-8 py-32">
         <div className="flex justify-between items-center">
           <div className="hero-left">
@@ -421,7 +421,7 @@ export default function Landing() {
 
       <div className="flex py-24 md:flex-row flex-col items-center container 2xl:px-24 sm:px-6 mx-auto">
         <div className="lg:flex-grow  flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-          <h1 className="title-font sm:text-5xl text-3xl mb-12 font-medium text-gray-900 dark:text-white">
+          <h1 className="title-font sm:text-5xl text-3xl mb-12 font-medium text-white dark:text-white">
             Zilliqa Soul-Bound Token
           </h1>
           <div className="flex justify-between space-x-8 mb-12">

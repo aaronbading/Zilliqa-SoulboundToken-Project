@@ -239,3 +239,11 @@ h2 {
 .mint-form form input {
   width: 155%;
 }
+/* educate page */
+.zsbt-logo img {
+  width: 100vw;
+  height: 400px;
+  object-fit: cover;
+  object-position: -10px -890px;
+  filter: brightness(90%);
+}

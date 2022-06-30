@@ -61,7 +61,7 @@ function WalletProvider({ children }: Props) {
       // set a state notinstalled
       setNotInstalled(true);
 
-      document.getElementById("walletModal")?.classList.toggle("opacity-0");
+      document.getElementById("walletModal")?.classList.toggle("hidden");
       document.getElementById("walletModal")?.classList.toggle("mt-[-100vh]");
     }
   }, [zilPay]);

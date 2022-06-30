@@ -1,21 +1,21 @@
-import { Routes, Route } from "react-router-dom";
-import AppContainer from "./components/AppContainer";
-import Dummy from "./pages/Dummy";
-import Landing from "./pages/Landing";
-import Educational from "./pages/Educational";
+import { Routes, Route } from 'react-router-dom';
+import AppContainer from './components/AppContainer';
+import Dummy from './pages/Dummy';
+import Landing from './pages/Landing';
+import Educational from './pages/Educational';
 // import CreateProfile from "./pages/CreateProfile";
-import CreateProfile from "./pages/CreateProfile";
+import CreateProfile from './pages/CreateProfile';
 
-import ProfileDetail from "./pages/ProfileDetail";
-import Profiles from "./pages/Profiles";
-import WalletProvider from "./providers/WalletProvider";
-import ZilliqaProvider from "./providers/ZilliqaProvider";
-import PinataProvider from "./providers/PinataProvider";
+import ProfileDetail from './pages/ProfileDetail';
+import Profiles from './pages/Profiles';
+import WalletProvider from './providers/WalletProvider';
+import ZilliqaProvider from './providers/ZilliqaProvider';
+import PinataProvider from './providers/PinataProvider';
 
-// import WalletModal from "./components/WalletModal";
+import WalletModal from './components/WalletModal';
 
-import ColorModeProvider from "./providers/ColormodeProvider";
-import Web3StorageProvider from "./providers/Web3StorageProvider";
+import ColorModeProvider from './providers/ColormodeProvider';
+import Web3StorageProvider from './providers/Web3StorageProvider';
 
 const App = () => {
   return (
@@ -37,7 +37,7 @@ const App = () => {
                   <Route path="/educational" element={<Educational />} />
                 </Route>
               </Routes>
-              {/* <WalletModal></WalletModal> */}
+              <WalletModal></WalletModal>
             </ColorModeProvider>
           </PinataProvider>
         </Web3StorageProvider>
