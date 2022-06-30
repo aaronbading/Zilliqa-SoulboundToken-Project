@@ -47,7 +47,7 @@ const ZilliqaProvider = ({ children }: { children: ReactNode }) => {
       }
       // TODO: Move contract address to .env
       const contract = await zilliqaClient.contracts.at(
-        "0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b"
+        "0xb019d93b6ad4b8e7339a1042ede50341a77cca0f"
       );
       return contract.call(transition, args, { ...TX_PARAMS, ...params });
     },

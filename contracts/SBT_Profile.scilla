@@ -17,7 +17,11 @@ let false = False
 let true = True
 let zero = Uint256 0
 let one = Uint256 1
+let two = Uint256 2
+
 let empty_string = ""
+let one_string = "1"
+let zero_string = "0"
 
 let add_operation = Add
 let sub_operation = Sub
@@ -127,11 +131,10 @@ field balances: Map ByStr20 Uint256 = Emp ByStr20 Uint256
 (* Token URIs *)
 (* Address[0] == ProfilePictureURI*)
 (* Address[1] == ProfileDataURI*)
+(* Address[2] == Achievement *)
 field token_uris: Map ByStr20 (Map Uint256 String)
   = Emp ByStr20 (Map Uint256 String)
 
-  (*All achievements   *)
-field achievements_bool: Map ByStr20 Uint256 = Emp ByStr20 Uint256
 
 
 (* Emit Errors *)
@@ -281,7 +284,9 @@ procedure BurnToken(to: ByStr20)
   (* Destroy existing token *)
   delete token_uris[to][zero];
   delete token_uris[to][one];
-  delete achievements_bool[to];
+  delete token_uris[to][two];
+  delete token_uris[to];
+
   (* subtract one from the balance *)
   UpdateBalance sub_operation to;
   (* Delete the addresses balance (likely redundant) *)
@@ -311,7 +316,7 @@ transition Mint(to: ByStr20, picture_uri: String, data_uri: String)
   RequireSelf to _sender;
   MintToken to; 
   SetURI to picture_uri data_uri;
-  achievements_bool[to] := zero;
+  token_uris[to][two]:=zero_string;
   totalsupply_at_mint <- total_supply; 
   e = {
     _eventname: "Mint";
@@ -416,21 +421,26 @@ transition Earn_achievement(to: ByStr20 , value: Uint256)
   RequireNotPaused;
   (*Check that address is valid*)
   RequireValidDestination to;
-
   RequireNotSelf to _sender;
   (*Check that address has sbt*)
   HasToken to;
 
-  achievements_bool[to] := value;
-  msg_to_sender = {
-  _tag: "ZSBT_EarnAchievementCallback";
-  _recipient: _sender;
-  _amount: Uint128 0;
-  user: to;
-  achievement_earned: value
-  };
-  msgs = one_msg msg_to_sender;
-  send msgs
+  is_earned = builtin eq value one;
+  match is_earned with
+  | False =>    
+    
+  | True =>
+    token_uris[to][two]:= one_string;
+    msg_to_sender = {
+        _tag: "ZSBT_EarnAchievementCallback";
+        _recipient: _sender;
+        _amount: Uint128 0;
+        user: to;
+        achievement_earned: value
+        };
+        msgs = one_msg msg_to_sender;
+        send msgs
+  end
 end
 
 

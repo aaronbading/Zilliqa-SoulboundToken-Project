@@ -4,10 +4,10 @@ import React, {
   useContext,
   useMemo,
   useState,
-} from 'react';
-import { Contracts } from '@zilliqa-js/contract';
-import { CallParams, Value } from '../types/zilliqa';
-import { TX_PARAMS } from './ZilliqaProvider';
+} from "react";
+import { Contracts } from "@zilliqa-js/contract";
+import { CallParams, Value } from "../types/zilliqa";
+import { TX_PARAMS } from "./ZilliqaProvider";
 
 declare global {
   interface Window {
@@ -36,11 +36,11 @@ function WalletProvider({ children }: Props) {
   const callContract = useCallback(
     async (transition: string, args: Value[], params?: CallParams) => {
       if (!zilPay) {
-        throw new Error('ZilPay client is not initialized');
+        throw new Error("ZilPay client is not initialized");
       }
       // TODO: Move contract address to .env
       const contract = await zilPay.contracts.at(
-        '0xf6fc98103b75c7e6b2b690e3419f66360ba32e8b',
+        "0xb019d93b6ad4b8e7339a1042ede50341a77cca0f"
       );
 
       const callTx = contract.call(transition, args, {
@@ -50,7 +50,7 @@ function WalletProvider({ children }: Props) {
 
       return callTx;
     },
-    [zilPay],
+    [zilPay]
   );
 
   const connect = useCallback(async () => {
@@ -61,8 +61,8 @@ function WalletProvider({ children }: Props) {
       // set a state notinstalled
       setNotInstalled(true);
 
-      document.getElementById('walletModal')?.classList.toggle('hidden');
-      document.getElementById('walletModal')?.classList.toggle('mt-[-100vh]');
+      document.getElementById("walletModal")?.classList.toggle("hidden");
+      document.getElementById("walletModal")?.classList.toggle("mt-[-100vh]");
     }
   }, [zilPay]);
 

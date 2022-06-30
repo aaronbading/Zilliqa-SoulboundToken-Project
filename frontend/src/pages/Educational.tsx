@@ -1,31 +1,32 @@
-import logo from '../../public/img/ZSBT-logos.jpeg';
+import logo from "../../public/img/ZSBT-logos.jpeg";
 
-import Link from '../components/Link';
-import AdaptiveContent from '../components/AdaptiveContent';
-import { AdaptiveContentProps } from '../types/types';
+import Link from "../components/Link";
+import AdaptiveContent from "../components/AdaptiveContent";
+import { AdaptiveContentProps } from "../types/types";
 
 const content: AdaptiveContentProps[] = [
   {
-    title: 'The Set Up',
-    subtitle: 'Setting up the Neo Savant IDE and Zilpay wallet',
+    title: "The Set Up",
+    subtitle: "Setting up the Neo Savant IDE and Zilpay wallet",
     content:
-      'Head to Neo Savant IDE. Create another account on your ZilPay. Request testnet $ZIL from faucet. Switch to testnet on your IDE.',
-    subcontent: ' ',
+      "Head to Neo Savant IDE. Create another account on your ZilPay. Request testnet $ZIL from faucet. Switch to testnet on your IDE.",
+    subcontent: " ",
   },
   {
-    title: 'Scilla Language',
-    subtitle: 'Writing your smart contract',
+    title: "Scilla Language",
+    subtitle: "Writing your smart contract",
     content:
-      'Create a new file by clicking the file icon on the upper left corner. Refer to the smart contracts in our github repository.(Zilliqa-Soulbound-Project/contract/example/proxy.scilla) modify it such that you can call the transition Earn_achievement in SBT_profile.',
-    subcontent: ' ',
+      "Create a new file by clicking the file icon on the upper left corner. Refer to the smart contracts in our github repository.(Zilliqa-Soulbound-Project/contract/example/proxy.scilla) modify it such that you can call the transition Earn_achievement in SBT_profile.",
+    subcontent: " ",
   },
 
   {
-    title: 'Achievement Unlocked!',
-    subtitle: 'Deploying the smart contract and earning the achievement',
+    title: "Achievement Unlocked!",
+    subtitle: "Deploying the smart contract and earning the achievement",
     content:
-      'After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile',
-    subcontent: ' ',
+      "After deploying the smart contract and calling the Earn_achievement transition, you have now earned your achievement! It should be displayed in your profile",
+    subcontent:
+      " There is an example scilla smart contract that achieves this at address : 0xde5a7833f99c421ac4803d50c0bca031fe234c2b. It takes as parameters our core contract address : 0xb019d93b6ad4b8e7339a1042ede50341a77cca0f and the receipient wallet address . Check out the sample in the Zilliqua Explorer if you get stuck. Good Luck .  ",
   },
 ];
 
