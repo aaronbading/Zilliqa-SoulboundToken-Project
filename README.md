@@ -1,66 +1,37 @@
 # Zilliqa-Soulbound-Project
-The Zil Soul-bound token project is one that realizes a non-transferable token that represents ones credentials and identity on chain. The project aims to provide features such as minting SBT for yourself or others , Viewing your own and other peoples SBTs.
+The Zil Soul-bound token project is one that realizes a non-transferable token that represents ones credentials and identity on chain. This project is a WIP and currently allows for Minting , Burning , and Viewing Profiles . The smart contracts are written in Zilliqa's smartcontract language Scilla.
+This project was built for the [Zilliqa | ZILHive] Open Track Challenge for the Grants Round 14 Hackathon in June 2022.
 
 <p align="center">•
   <a href="#setup">Setup</a> •
   <a href="#demo">Demo</a> •
-  <a href="#team">Team</a> •
   <a href="#features">Features</a> •
 </p>
 
+## Demo
+Everyone is encouraged to install Zilpay Chrome extension, grab some testnet Zil from the faucet and mint an SBT profile on the Live Website: https://zilsbt.netlify.app/
+
+This demo is still a Work in progress and does not realize the true potential of the SBT idea but it was an amazing learning experience. 
 ## Setup
 
 ### Prerequisites
-Install node >= 14 and npm. Run the command:
+Install node >= 14 and npm
 
-```bash
-$ npm install -g npm
-```
-to install the dependencies.
+Create `.env` file from `.env.example` and fill in the values of all variables with an Api Key from Web3Storage. Easily create an account here: https://web3.storage/login/.
 
-### Local development server
+## Local development server
 
-After installing node.js and npm, run these commands:
+After installing node.js and npm and creating your .env file, run these commands:
 
 ```bash
 $ cd frontend
 $ npm install
 $ npm start
 ```
-## Demo
-Live Website: https://zilsbt.netlify.app/
-Walkthrough: https://youtu.be/0LDV5Lv7J3M
-## Team
-
-### Ivan
-Email: ivan.ng.chak.ming@gmail.com
-Github: @ivan-ngchakming https://github.com/ivan-ngchakming
-
-### Aaron
-Email:
-Github: @aaronbading https://github.com/aaronbading
-
-### Wayne
-Email: devchain7890@gmail.com 
-Github: @hougangdev https://github.com/hougangdev
-
-### Mumeen
-Email: azeezmumeen6@gmail.com
-Github: @mum33n https://github.com/mum33n
-
-### Yosh
-Email: imyosh4@gmail.com
-Github: @imyosh https://github.com/imyosh
-
-### John
-Email:
-Github:
 
 ## Features
 
-- Sample SBT Profile smart contract written in Scilla 
-- React website for minting of a SBT profile 
-- Scilla, Typescript, Tailwindcss...
+- Sample SBT Profile smart contract written in Scilla
+- Frontend uses React and Typescript 
+- Tailwindcss was used for styling
 
-## License
-Apache License 2.0
